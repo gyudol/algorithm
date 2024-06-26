@@ -44,8 +44,8 @@ public class Main {
 				cabbages.add(new int [] {row, col});
 			}
 			
-			for(int i = 0; i < cabbages.size(); i++) {
-				int row = cabbages.get(i)[0], col = cabbages.get(i)[1];
+			for(int [] c : cabbages) {
+				int row = c[0], col = c[1];
 				
 				if(field[row][col] == 0) continue;
 				
