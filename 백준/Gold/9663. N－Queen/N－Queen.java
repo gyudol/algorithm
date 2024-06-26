@@ -2,29 +2,29 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Main {
-	private static int N;
 	private static int cnt;
+	private static int N;
 	
-	private static boolean promising(int [] isVisited, int depth, int col) {
-		for(int i = 0; i < depth; i++) {
-			if(isVisited[i] == col) return false;
-			else if(depth - i == Math.abs(col - isVisited[i])) return false;
+	private static boolean promising(int depth, int curCol, int [] isVisited) {
+		for(int row = 0; row < depth; row++) {
+			if(curCol == isVisited[row]) return false;
+			if(depth - row == Math.abs(curCol - isVisited[row])) return false;
 		}
 		
 		return true;
 	}
 	
-	private static void nQueen(int [] isVisited, int depth) {
+	private static void nQueen(int depth, int [] isVisited) {
 		if(depth == N) {
 			cnt++;
 			return;
 		}
 		
 		for(int col = 0; col < N; col++) {
-			if(!promising(isVisited, depth, col)) continue;
+			if(!promising(depth, col, isVisited)) continue;
 			
 			isVisited[depth] = col;
-			nQueen(isVisited, depth + 1);
+			nQueen(depth + 1, isVisited);
 		}
 	}
 	
@@ -33,7 +33,8 @@ public class Main {
 		N = Integer.parseInt(br.readLine());
 		cnt = 0;
 		
-		nQueen(new int [N], 0);
+		nQueen(0, new int [N]);
+		
 		System.out.print(cnt);
 	}
 }
