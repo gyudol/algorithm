@@ -1,45 +1,29 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Main {
 	private static final int TARGET = 1;
+	private static int [] dp;
 	
-	private static class State {
-		public final int x;
-		public final int depth;
+	private static int calculate(int N) {
+		if(N <= TARGET) return 0;
+		if(dp[N] != 0) return dp[N];
 		
-		private State(int x, int depth) {
-			this.x = x;
-			this.depth = depth;
-		}
-	}
-	
-	private static int bfs(int N) {
-		Queue<State> q = new LinkedList<>();
-		q.offer(new State(N, 0));
+		dp[N] = calculate(N - 1) + 1;
 		
-		while(!q.isEmpty()) {
-			State state = q.poll();
-			
-			if(state.x == TARGET) return state.depth;
-			
-			for(int i = 3; i >= 2; i--) {
-				if(state.x % i == 0) 
-					q.offer(new State(state.x / i, state.depth + 1));
-			}
-			
-			if(state.x > 1) q.offer(new State(state.x - 1, state.depth + 1));
+		for(int i = 3; i >= 2; i--) {
+			if(N % i == 0) dp[N] = Math.min(dp[N], calculate(N / i) + 1);
 		}
 		
-		return -1;
+		return dp[N];
 	}
 	
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
+		dp = new int [N + 1];
 		
-		System.out.print(bfs(N));
+		for(int i = 2; i <= N; i++) calculate(i);	// depth가 너무 깊어지면 비효율적이므로 dp를 미리 심어줌
+		System.out.print(calculate(N));
 	}
 }
