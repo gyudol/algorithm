@@ -12,7 +12,7 @@ public class Main {
 			if(alphabet[cur - 'a'] > 1 && cur != word.charAt(i - 1)) return false;
 		}
 		
-		return true; 
+		return true;
 	}
 	
 	public static void main(String [] args) throws Exception {
