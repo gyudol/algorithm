@@ -7,9 +7,7 @@ public class Main {
 		int n = Integer.parseInt(br.readLine());
 		int edgePoint = 2;
 		
-		for(int i = 1; i <= n; i++) {
-			edgePoint += (edgePoint - 1);
-		}
+		for(int i = 1; i <= n; i++) edgePoint += (edgePoint - 1);
 		
 		System.out.print(edgePoint * edgePoint);
 	}
