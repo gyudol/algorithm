@@ -11,6 +11,6 @@ public class Main {
 			result.append('l').append('o').append('n').append('g').append(" ");
 		result.append('i').append('n').append('t');
 
-		System.out.print(result); 
+		System.out.print(result);
 	}
 }
