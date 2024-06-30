@@ -14,10 +14,7 @@ public class Main {
 		for(int i = 0; i < LEN; i++) tri[i] = Integer.parseInt(st.nextToken());
 		Arrays.sort(tri);
 		
-		while(tri[0] + tri[1] <= tri[2]) {
-			tri[2]--;
-			Arrays.sort(tri);
-		}
+		if(tri[2] >= tri[0] + tri[1]) tri[2] = tri[0] + tri[1] - 1;
 		
 		System.out.print(tri[0] + tri[1] + tri[2]);
 	}
