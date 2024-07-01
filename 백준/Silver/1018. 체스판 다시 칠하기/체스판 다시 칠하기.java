@@ -4,49 +4,35 @@ import java.util.StringTokenizer;
 
 public class Main {
 	private static final int LEN = 8;
-	private static final char [] COLOR = {'B', 'W'};
+	private static final String [] WB_BOARD = {"WBWBWBWB", "BWBWBWBW"};
+	private static String [] board;
+	
+	private static int getMinCost(int srcRow, int srcCol) {
+		int WB_cnt = 0;
+		
+		for(int i = 0; i < LEN; i++) {
+			for(int j = 0; j < LEN; j++) {
+				if(board[i + srcRow].charAt(j + srcCol) != WB_BOARD[i % WB_BOARD.length].charAt(j)) 
+					WB_cnt++;
+			}
+		}
+		
+		// BW_cnt = 64 - WB_cnt (체스판의 최대 크기가 8*8이기 때문)
+		return Math.min(WB_cnt, LEN * LEN - WB_cnt);
+	}
 	
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
-		char [][] WB_board = new char [COLOR.length][LEN];	// 2줄씩 반복되는 구조
-		char [][] BW_board = new char [COLOR.length][LEN];
-		char [][] board = new char [n][m];
-		int srcRow = 0, desRow = LEN, srcCol = 0, desCol = LEN;
+		board = new String [n];
 		int min = Integer.MAX_VALUE;
 		
-		for(int i = 0; i < n; i++) {
-			String line = br.readLine();
-			
-			for(int j = 0; j < m; j++) board[i][j] = line.charAt(j);
-		}
+		for(int i = 0; i < n; i++) board[i] = br.readLine();
 		
-		for(int i = 0; i < COLOR.length; i++) {
-			for(int j = 0; j < LEN; j++) {
-				int colorIdx = j % COLOR.length;
-				
-				WB_board[i][j] = i == 0 ? COLOR[1 - colorIdx] : COLOR[colorIdx];
-				BW_board[i][j] = i == 0 ? COLOR[colorIdx] : COLOR[1 - colorIdx];
-			}
-		}
-		
-		while(desRow <= n) {
-			int wbCnt = 0, bwCnt = 0;
-			
-			for(int i = srcRow; i < desRow; i++) {
-				for(int j = srcCol; j < desCol; j++) {
-					if(board[i][j] != WB_board[i % COLOR.length][j - srcCol]) wbCnt++;
-					if(board[i][j] != BW_board[i % COLOR.length][j - srcCol]) bwCnt++;
-				}
-			}
-			
-			min = Math.min(Math.min(min, wbCnt), bwCnt);
-			srcCol++;	desCol++;
-			
-			if(desCol > m) {
-				srcRow++;	desRow++;
-				srcCol = 0;	desCol = LEN;
+		for(int i = 0; i <= n - LEN; i++) {
+			for(int j = 0; j <= m - LEN; j++) {
+				min = Math.min(min, getMinCost(i, j));
 			}
 		}
 		
