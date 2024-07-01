@@ -4,20 +4,11 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static int n;
-	
-	private static int maxCnt(int [][] meetings, int src, int endTime, int cnt) {
-		for(int i = src; i < n; i++) {
-			if(meetings[i][0] >= endTime) return maxCnt(meetings, i + 1, meetings[i][1], cnt + 1);
-		}
-		
-		return cnt;
-	}
-	
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine());
 		int [][] meetings = new int [n][2];
+		int maxCnt = 0, endTime = 0;
 		
 		for(int i = 0; i < n; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
@@ -31,6 +22,13 @@ public class Main {
 			return Integer.compare(m1[1], m2[1]);
 		});
 		
-		System.out.print(maxCnt(meetings, 0, 0, 0));
+		for(int [] meeting : meetings) {
+			if(meeting[0] >= endTime) {
+				endTime = meeting[1];
+				maxCnt++;
+			}
+		}
+		
+		System.out.print(maxCnt);
 	}
 }
