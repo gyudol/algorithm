@@ -11,8 +11,7 @@ public class Main {
 		
 		for(int i = 0; i < LEN; i++) {
 			if(scale[i] == ASC_SCALE[i]) ascCnt++;
-			else if(scale[i] == ASC_SCALE[LEN - 1 - i]) desCnt++;
-			else return "mixed";
+			if(scale[i] == ASC_SCALE[LEN - 1 - i]) desCnt++;
 		}
 		
 		return ascCnt == LEN ? "ascending" : desCnt == LEN ? "descending" : "mixed";
