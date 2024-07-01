@@ -4,12 +4,14 @@ import java.util.StringTokenizer;
 
 public class Main {
 	private static int decompSum(int n) {
-		int sum = 0;
+		int sum = n;
 		
-		for(char c : Integer.toString(n).toCharArray())
-			sum += c - '0';
+		while(n > 0) {
+			sum += n % 10;
+			n /= 10;
+		}
 		
-		return sum + n;
+		return sum;
 	}
 	
 	private static int constructor(int n) {
