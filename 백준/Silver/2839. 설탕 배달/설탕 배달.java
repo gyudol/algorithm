@@ -15,12 +15,12 @@ public class Main {
 		Arrays.fill(dp, MAX);
 		dp[0] = 0;
 		
-		for(int i = 0; i <= n; i++) {
-			for(int env : ENV) {
+		for(int env : ENV) {
+			for(int i = env; i <= n; i++) {
 				if(i >= env) dp[i] = Math.min(dp[i], dp[i - env] + 1);
 			}
 		}
-		
+	
 		System.out.print(dp[n] == MAX ? -1 : dp[n]);
 	}
 }
