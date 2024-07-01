@@ -3,7 +3,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
-	private static final int MAX = 1667;	// (4995 / 3) + (5 / 1) = 1666
+	private static final int MAX = 1667;	// (4995 / 3) + (5 / 5) = 1666
 	private static final int [] ENV = {3, 5};
 	private static int [] dp;
 	
