@@ -11,17 +11,17 @@ public class Main {
 		int n = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int m = Integer.parseInt(br.readLine());;
-		Map<Integer, Integer> hand = new HashMap<>();
+		Map<String, Integer> hand = new HashMap<>();
 		
 		for(int i = 0; i < n; i++) {
-			int card = Integer.parseInt(st.nextToken());
+			String card = st.nextToken();
 			
 			hand.put(card, hand.getOrDefault(card, 0) + 1);
 		}
 		
 		st = new StringTokenizer(br.readLine());
 		for(int i = 0; i < m; i++) 
-			result.append(hand.getOrDefault(Integer.parseInt(st.nextToken()), 0)).append(' ');
+			result.append(hand.getOrDefault(st.nextToken(), 0)).append(' ');
 		
 		System.out.print(result);
 	}
