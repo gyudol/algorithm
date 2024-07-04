@@ -29,10 +29,10 @@ public class Main {
 			Balloon b = balloons.pollFirst();
 			
 			if(b.offset > 0) {
-				for(int i = 0; i < b.offset - 1; i++) balloons.addLast(balloons.pollFirst());
+				for(int i = 0; i < b.offset - 1; i++) balloons.offerLast(balloons.pollFirst());
 			}
 			else {
-				for(int i = 0; i > b.offset; i--) balloons.addFirst(balloons.pollLast());
+				for(int i = 0; i > b.offset; i--) balloons.offerFirst(balloons.pollLast());
 			}
 			
 			result.append(b.idx).append(' ');
