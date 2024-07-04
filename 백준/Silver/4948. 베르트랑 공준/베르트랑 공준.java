@@ -10,10 +10,10 @@ public class Main {
 		boolean [] isNotPrime = new boolean [MAX + 1];
 		isNotPrime[0] = isNotPrime[1] = true;
 		
-		for(int i = 2; i < isNotPrime.length; i++) {
+		for(int i = 2; i <= Math.sqrt(MAX); i++) {
 			if(isNotPrime[i]) continue;
 			
-			for(long j = i * 1L * i; j < isNotPrime.length; j += i) isNotPrime[(int) j] = true;
+			for(int j = i * i; j <= MAX; j += i) isNotPrime[j] = true;
 		}
 		
 		while(true) {
