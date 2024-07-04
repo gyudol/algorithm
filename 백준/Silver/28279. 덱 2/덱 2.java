@@ -15,8 +15,8 @@ public class Main {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			
 			switch(Integer.parseInt(st.nextToken())) {
-				case 1: deque.addFirst(Integer.parseInt(st.nextToken())); break;
-				case 2: deque.addLast(Integer.parseInt(st.nextToken())); break;
+				case 1: deque.offerFirst(Integer.parseInt(st.nextToken())); break;
+				case 2: deque.offerLast(Integer.parseInt(st.nextToken())); break;
 				case 3: result.append(deque.isEmpty() ? -1 : deque.pollFirst()).append('\n'); break;
 				case 4:	result.append(deque.isEmpty() ? -1 : deque.pollLast()).append('\n'); break;
 				case 5: result.append(deque.size()).append('\n'); break;
