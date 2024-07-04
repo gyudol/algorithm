@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
 	private static int gcd(int a, int b) {
@@ -11,17 +10,14 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 		int [] trees = new int [n];
-		int [] dist = new int [n - 1];
 		
 		for(int i = 0; i < n; i++) trees[i] = Integer.parseInt(br.readLine());
-		for(int i = 0; i < dist.length; i++) dist[i] = trees[i + 1] - trees[i];
 		
-		int distGcd = dist[0];
-		for(int i = 1; i < dist.length; i++) distGcd = gcd(distGcd, dist[i]);
+		int distGcd = trees[1] - trees[0];
+		for(int i = 2; i < trees.length; i++) distGcd = gcd(distGcd, trees[i] - trees[i - 1]);
 		
-		int cnt = 0;
-		for(int i = 0; i < dist.length; i++) cnt += (dist[i] - distGcd) / distGcd;
+		int need = (trees[n - 1] - trees[0]) / distGcd + 1 - trees.length;
 		
-		System.out.print(cnt);
+		System.out.print(need);
 	}
 }
