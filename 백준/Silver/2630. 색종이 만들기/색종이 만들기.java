@@ -3,8 +3,6 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static int n;
-	
 	private static class Count {
 		public int zero;
 		public int one;
@@ -41,7 +39,7 @@ public class Main {
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder result = new StringBuilder();
-		n = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine());
 		int [][] confetti = new int [n][n];
 		
 		for(int i = 0; i < n; i++) {
