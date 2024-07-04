@@ -9,10 +9,6 @@ public class Main {
 		return b == 0 ? a : gcd(b, a % b);
 	}
 	
-	private static int lcm(int a, int b) {
-		return a * b / gcd(a, b);
-	}
-	
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder result = new StringBuilder();
@@ -24,11 +20,11 @@ public class Main {
 			for(int j = 0; j < LEN; j++) fraction[i][j] = Integer.parseInt(st.nextToken());
 		}
 		
-		int lcmOfDen = lcm(fraction[0][1], fraction[1][1]);
-		int numerator = lcmOfDen / fraction[0][1] * fraction[0][0] + lcmOfDen / fraction[1][1] * fraction[1][0];
-		int gcdOfFrac = gcd(numerator, lcmOfDen);
+		int [] res = {fraction[0][0] * fraction[1][1] + fraction[1][0] * fraction[0][1],
+				fraction[0][1] * fraction[1][1]};
+		int divGcd = gcd(res[0], res[1]);
 		
-		result.append(numerator / gcdOfFrac).append(' ').append(lcmOfDen / gcdOfFrac);
+		result.append(res[0] / divGcd).append(' ').append(res[1] / divGcd);
 		
 		System.out.print(result);
 	}
