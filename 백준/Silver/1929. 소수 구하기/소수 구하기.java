@@ -11,10 +11,10 @@ public class Main {
 		boolean [] isNotPrime = new boolean [n + 1];
 		isNotPrime[0] = isNotPrime[1] = true;
 		
-		for(int i = 2; i <= n; i++) {
+		for(int i = 2; i <= Math.sqrt(n); i++) {
 			if(isNotPrime[i]) continue;
 			
-			for(long j = i * 1L * i; j <= n; j += i) isNotPrime[(int) j] = true;
+			for(int j = i * i; j <= n; j += i) isNotPrime[j] = true;
 		}
 		
 		for(int i = m; i <= n; i++) {
