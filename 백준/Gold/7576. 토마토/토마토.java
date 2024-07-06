@@ -29,11 +29,11 @@ public class Main {
 		
 		while(!ripeTomatoes.isEmpty()) {
 			Tomato tomato = ripeTomatoes.poll();
+			int nextDay = tomato.day + 1;
 			
 			for(int [] d : DIR) {
 				int nextRow = tomato.row + d[0];
 				int nextCol = tomato.col + d[1];
-				int nextDay = tomato.day + 1;
 				
 				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m || 
 						tomatoes[nextRow][nextCol] == -1 || isVisited[nextRow][nextCol]) continue;
@@ -60,14 +60,13 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			
 			for(int j = 0; j < m; j++) {
-				int num = Integer.parseInt(st.nextToken());
+				tomatoes[i][j] = Integer.parseInt(st.nextToken());
 
-				if(num == 1) {
+				if(tomatoes[i][j] == 1) {
 					isVisited[i][j] = true;
 					ripeTomatoes.offer(new Tomato(i, j, 0));
 				}
-				else if(num == 0) raw++;
-				tomatoes[i][j] = num;
+				else if(tomatoes[i][j] == 0) raw++;
 			}
 		}
 		
