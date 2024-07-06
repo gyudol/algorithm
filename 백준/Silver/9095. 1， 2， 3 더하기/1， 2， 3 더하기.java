@@ -8,9 +8,9 @@ public class Main {
 	private static int calculate(int n) {
 		if(dp[n] != 0) return dp[n];
 		
-		// n > 3일 때, 경우의 수 A(n) = 	A(n-1): n-1을 만드는 모든 경우 각각에 1을 더하는 것 +
-		//								A(n-2): n-2를 만드는 모든 경우 각각에 2를 더하는 것 +
-		//								A(n-3): n-3을 만드는 모든 경우 각각에 3을 더하는 것
+		// n > 3일 때, 경우의 수 A(n) = A(n-1): n-1을 만드는 모든 경우 각각에 1을 더하는 것 +
+		//				A(n-2): n-2를 만드는 모든 경우 각각에 2를 더하는 것 +
+		//				A(n-3): n-3을 만드는 모든 경우 각각에 3을 더하는 것
 		return dp[n] = calculate(n - 1) + calculate(n - 2) + calculate(n - 3);
 	}
 	
