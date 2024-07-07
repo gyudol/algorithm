@@ -22,6 +22,7 @@ public class Main {
 			this.dist = dist;
 		}
 	}
+    
 	private static int [][] bfs(int srcRow, int srcCol) {
 		int [][] res = new int [n][m];
 		Queue<Coord> q = new LinkedList<>();
@@ -71,10 +72,9 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			
 			for(int j = 0; j < m; j++) {
-				int land = Integer.parseInt(st.nextToken());
+				map[i][j] = Integer.parseInt(st.nextToken());
 				
-				map[i][j] = land;
-				if(land == 2) {
+				if(map[i][j] == 2) {
 					srcRow = i;
 					srcCol = j;
 				}
