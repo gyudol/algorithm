@@ -30,7 +30,6 @@ public class Main {
 					break;
 				}
 				case "all": {
-					set.clear();
 					for(int x = 1; x <= MAX; x++) set.add(x);
 					break;
 				}
