@@ -27,7 +27,7 @@ public class Main {
 		StringBuilder result = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
 		
-		for(int tc = 1; tc <= T; tc++ ) {
+		for(int tc = 1; tc <= T; tc++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int m = Integer.parseInt(st.nextToken()), n = Integer.parseInt(st.nextToken());
 			int x = Integer.parseInt(st.nextToken()), y = Integer.parseInt(st.nextToken());
