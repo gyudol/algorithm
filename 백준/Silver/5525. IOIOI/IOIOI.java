@@ -7,9 +7,9 @@ public class Main {
 	private static String str;
 	
 	private static String getPattern(int n) {
-		StringBuilder sb = new StringBuilder().append('I').append('O').append('I');
+		StringBuilder sb = new StringBuilder().append('I');
 		
-		for(int i = 2; i <= n; i++) sb.append('O').append('I');
+		for(int i = 0; i < n; i++) sb.append('O').append('I');
 		
 		return sb.toString();
 	}
