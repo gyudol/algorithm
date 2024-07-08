@@ -16,9 +16,7 @@ public class Main {
 			y = (y + minOffset - 1) % endY + 1;
 			year += minOffset;
 			
-			if(y - x == targetY - targetX) {
-				return year + (targetY - y);
-			}
+			if(y - x == targetY - targetX) return year + (targetY - y);
 		}
 		
 		return -1;
