@@ -31,10 +31,10 @@ public class Main {
 		
 		for(int tc = 1; tc <= T; tc++ ) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int endX = Integer.parseInt(st.nextToken()), endY = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken()), n = Integer.parseInt(st.nextToken());
 			int x = Integer.parseInt(st.nextToken()), y = Integer.parseInt(st.nextToken());
 			
-			result.append(khaingYear(endX, endY, x, y)).append('\n');
+			result.append(khaingYear(m, n, x, y)).append('\n');
 		}
 		
 		System.out.print(result);
