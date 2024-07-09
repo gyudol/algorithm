@@ -9,7 +9,6 @@ public class Main {
 		{{0, 0, 1}, {0, 0, -1}, {0, -1, 0}, {0, 1, 0}, {1, 0, 0}, {-1, 0, 0}};
 	private static int [][][] tomatoes;
 	private static Queue<Tomato> ripeTomatoes;
-	private static boolean [][][] isVisited;
 	private static int N, M, H;
 	
 	private static class Tomato {
@@ -38,12 +37,11 @@ public class Main {
 				int nextCol = tomato.col + d[1];
 				int nextHeight = tomato.height + d[2];
 				
-				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= M
-						|| nextHeight < 0 || nextHeight >= H || isVisited[nextRow][nextCol][nextHeight]
-								|| tomatoes[nextRow][nextCol][nextHeight] == -1) continue;
+				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= M || nextHeight < 0 
+						|| nextHeight >= H || tomatoes[nextRow][nextCol][nextHeight] != 0) continue;
 				
 				if(--raw == 0) return nextDay;
-				isVisited[nextRow][nextCol][nextHeight] = true;
+				tomatoes[nextRow][nextCol][nextHeight] = 1;
 				ripeTomatoes.offer(new Tomato(nextRow, nextCol, nextHeight, nextDay));
 			}
 		}
@@ -59,7 +57,6 @@ public class Main {
 		int raw = 0;
 		tomatoes = new int [N][M][H];
 		ripeTomatoes = new LinkedList<>();
-		isVisited = new boolean [N][M][H];
 		
 		for(int h = 0; h < H; h++) {
 			for(int n = 0; n < N; n++) {
@@ -68,10 +65,7 @@ public class Main {
 				for(int m = 0; m < M; m++) {
 					tomatoes[n][m][h] = Integer.parseInt(st.nextToken());
 					
-					if(tomatoes[n][m][h] == 1) {
-						isVisited[n][m][h] = true;
-						ripeTomatoes.offer(new Tomato(n, m, h, 0));
-					}
+					if(tomatoes[n][m][h] == 1) ripeTomatoes.offer(new Tomato(n, m, h, 0));
 					else if(tomatoes[n][m][h] == 0) raw++;
 				}
 			}
