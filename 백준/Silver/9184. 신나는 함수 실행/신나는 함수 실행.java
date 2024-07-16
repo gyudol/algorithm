@@ -10,7 +10,7 @@ public class Main {
 	private static int w(int a, int b, int c) {
 		if(dp[a][b][c] != 0) return dp[a][b][c];
 		if(a <= STD || b <= STD || c <= STD) return dp[a][b][c] = 1;
-		if(a > 20 + STD || b > 20 + STD || c > 20 + STD) 
+		if(a > STD + 20 || b > STD + 20 || c > STD + 20) 
 			return dp[a][b][c] = w(20 + STD, 20 + STD, 20 + STD);
 		if(a < b && b < c) return dp[a][b][c] = w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c);
 		
@@ -22,9 +22,9 @@ public class Main {
 		StringBuilder result = new StringBuilder();
 		dp = new int [MAX + 1][MAX + 1][MAX + 1];
 		
-		for(int i = 0; i <= MAX; i++) {
-			for(int j = 0; j <= MAX; j++) {
-				for(int k = 0; k <= MAX; k++) w(i, j, k);
+		for(int i = 0; i <= STD + 20; i++) {
+			for(int j = 0; j <= STD + 20; j++) {
+				for(int k = 0; k <= STD + 20; k++) w(i, j, k);
 			}
 		}
 		
