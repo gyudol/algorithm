@@ -33,7 +33,7 @@ public class Main {
 			int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken()),
 					c = Integer.parseInt(st.nextToken());
 			
-			if(a == -1 && b == -1 && c== -1) break;
+			if(a == -1 && b == -1 && c == -1) break;
 			
 			result.append('w').append('(').append(a).append(',').append(' ').append(b)
 				.append(',').append(' ').append(c).append(')').append(' ').append('=')
