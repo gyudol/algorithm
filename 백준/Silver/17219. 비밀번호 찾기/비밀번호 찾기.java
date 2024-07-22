@@ -13,9 +13,9 @@ public class Main {
 		int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
 		
 		for(int i = 0; i < n; i++) {
-			String [] line = br.readLine().split(" ");
+			st = new StringTokenizer(br.readLine());
 			
-			sites.put(line[0], line[1]);
+			sites.put(st.nextToken(), st.nextToken());
 		}
 		
 		for(int i = 0; i < m; i++) result.append(sites.get(br.readLine())).append('\n');
