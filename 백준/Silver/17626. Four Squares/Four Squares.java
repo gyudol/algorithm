@@ -9,18 +9,11 @@ public class Main {
 		int [] dp = new int [n + 1];
 		
 		Arrays.fill(dp, Integer.MAX_VALUE);
+		dp[0] = 0;
 		
 		for(int i = 1; i <= n; i++) {
-			if(i % Math.sqrt(i) == 0) dp[i] = 1;
-			else {
-				int sqrt = (int) Math.sqrt(i);
-				int prevPow = (int) Math.pow(sqrt, 2);
-				
-				while(prevPow > 0) {
-					dp[i] = Math.min(dp[i], dp[prevPow] + dp[i - prevPow]);
-					prevPow = (int) Math.pow(--sqrt, 2);
-				}
-			}
+			for(int j = 1; j * j <= i; j++) dp[i] = Math.min(dp[i], dp[i - j * j]);
+			dp[i]++;	// 제곱수는 모두 1이므로, minValue + 1
 		}
 		
 		System.out.print(dp[n]);
