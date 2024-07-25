@@ -21,8 +21,6 @@ public class Main {
 	}
 	
 	private static int move(int src) {
-		if(boardElements[src] == 0) return src;
-		
 		while(boardElements[src] != 0) {
 			src = boardElements[src];
 			
