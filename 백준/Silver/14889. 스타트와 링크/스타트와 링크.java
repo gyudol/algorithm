@@ -12,13 +12,13 @@ public class Main {
 		
 		for(int i = 0; i < n; i++) {
 			if(isVisited[i]) {
-				for(int j = 0; j < n; j++) {
-					if(isVisited[j]) startSum += s[i][j];
+				for(int j = i + 1; j < n; j++) {
+					if(isVisited[j]) startSum += s[i][j] + s[j][i];
 				}
 			}
 			else {
-				for(int j = 0; j < n; j++) {
-					if(!isVisited[j]) linkSum += s[i][j];
+				for(int j = i + 1; j < n; j++) {
+					if(!isVisited[j]) linkSum += s[i][j] + s[j][i];
 				}
 			}	
 		}
