@@ -47,9 +47,9 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
 		st = new StringTokenizer(br.readLine());
-		Person [] people = new Person [n + 1];
 		int truthCnt = Integer.parseInt(st.nextToken());
 		int lastTruePerson = -1;
+		Person [] people = new Person [n + 1];
 		List<int []> parties = new ArrayList<>();
 		
 		for(int i = 1; i <= n; i++) people[i] = new Person();
