@@ -1,40 +1,21 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static Node [] nodes;
+	private static ArrayList<List<Edge>> edges; 
 	private static int farthestNodeNum;
 	private static int max;
 	
-	private static class Node {
-		public int num;
-		public Node parent;
-		public Map<Integer, Integer> edges;
+	private static class Edge {
+		public int des;
+		public int cost;
 		
-		private Node(int num) {
-			this.num = num;
-			parent = null;
-			edges = new HashMap<>();
-		}
-		
-		private Node root() {
-			if(parent == null) return this;
-			return parent = parent.root();
-		}
-		
-		private boolean isConnected(Node o) {
-			return root() == o.root();
-		}
-		
-		private void merge(Node o, int cost) {
-			edges.put(o.num, cost);
-			
-			if(isConnected(o)) return;
-			
-			o.root().parent = this;
+		private Edge(int des, int cost) {
+			this.des = des;
+			this.cost = cost;
 		}
 	}
 	
@@ -47,21 +28,18 @@ public class Main {
 			farthestNodeNum = src;
 		}
 		
-		Node node = nodes[src];
-		
-		for(int nodeNum : node.edges.keySet()) {
-			dfs(nodeNum, sum + node.edges.get(nodeNum), isVisited);
-		}
+		for(Edge edge : edges.get(src))
+			dfs(edge.des, sum + edge.cost, isVisited);
 	}
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int v = Integer.parseInt(br.readLine());
-		nodes = new Node [v + 1];
+		edges = new ArrayList<>();
 		farthestNodeNum = -1;
 		max = Integer.MIN_VALUE;
 		
-		for(int i = 1; i <= v; i++) nodes[i] = new Node(i);
+		for(int i = 0; i <= v; i++) edges.add(new ArrayList<>());
 		
 		for(int i = 1; i <= v; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
@@ -72,7 +50,7 @@ public class Main {
 				
 				if(des == -1) break;
 				
-				nodes[src].merge(nodes[des], Integer.parseInt(st.nextToken()));
+				edges.get(src).add(new Edge(des, Integer.parseInt(st.nextToken())));
 			}
 		}
 		
