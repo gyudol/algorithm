@@ -1,12 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
 	private static int n;
-	private static int [][] graph;
+	private static ArrayList<ArrayList<Node>> graph;
 	
 	private static class Node implements Comparable<Node> {
 		public int vertex;
@@ -38,10 +39,11 @@ public class Main {
 			
 			if(curDist > distances[curVertex]) continue;
 			
-			for(int des = 1; des <= n; des++) {
-				if(graph[curVertex][des] == 0) continue;
-				
-				int nextDist = curDist + graph[curVertex][des];
+			for(Node node : graph.get(curVertex)) {
+				if(node.dist == 0) continue;
+
+				int des = node.vertex;
+				int nextDist = curDist + node.dist;
 				
 				if(nextDist < distances[des]) {
 					distances[des] = nextDist;
@@ -56,11 +58,8 @@ public class Main {
 	private static int longestTime(int [][] allDistances, int x) {
 		int max = Integer.MIN_VALUE;
 		
-		for(int i = 1; i <= n; i++) {
-			int time = allDistances[i][x] + allDistances[x][i];
-			
-			if(time > max) max = time;
-		}
+		for(int i = 1; i <= n; i++)
+			max = Math.max(max, allDistances[i][x] + allDistances[x][i]);
 		
 		return max;
 	}
@@ -70,14 +69,16 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken()); 
 		int m = Integer.parseInt(st.nextToken()), x = Integer.parseInt(st.nextToken());
-		graph = new int [n + 1][n + 1];
 		int [][] allDistances = new int [n + 1][n + 1];
+		
+		graph = new ArrayList<>();
+		for(int i = 0; i <= n; i++) graph.add(new ArrayList<>());
 		
 		for(int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
 			
-			graph[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())]
-					= Integer.parseInt(st.nextToken());
+			graph.get(Integer.parseInt(st.nextToken()))
+				.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
 		}
 		
 		for(int i = 1; i <= n; i++) allDistances[i] = dijkstra(i);
