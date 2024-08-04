@@ -7,27 +7,26 @@ import java.util.StringTokenizer;
 
 public class Main {
 	private static int n;
-	private static ArrayList<ArrayList<Node>> graph;
 	
 	private static class Node implements Comparable<Node> {
 		public int vertex;
-		public int dist;
+		public int time;
 		
-		private Node(int vertex, int dist) {
+		private Node(int vertex, int time) {
 			this.vertex = vertex;
-			this.dist = dist;
+			this.time = time;
 		}
 		
 		@Override
 		public int compareTo(Node other) {
-			return Integer.compare(this.dist, other.dist);
+			return Integer.compare(this.time, other.time);
 		}
 	}
 	
-	private static int [] dijkstra(int src) {
-		int [] distances = new int [n + 1];
-		Arrays.fill(distances, Integer.MAX_VALUE);
-		distances[src] = 0;
+	private static int [] dijkstra(ArrayList<ArrayList<Node>> graph, int src) {
+		int [] costs = new int [n + 1];
+		Arrays.fill(costs, Integer.MAX_VALUE);
+		costs[src] = 0;
 		
 		PriorityQueue<Node> minHeap = new PriorityQueue<>();
 		minHeap.offer(new Node(src, 0));
@@ -35,31 +34,30 @@ public class Main {
 		while(!minHeap.isEmpty()) {
 			Node curNode = minHeap.poll();
 			int curVertex = curNode.vertex;
-			int curDist = curNode.dist;
+			int curTime = curNode.time;
 			
-			if(curDist > distances[curVertex]) continue;
+			if(curTime > costs[curVertex]) continue;
 			
 			for(Node node : graph.get(curVertex)) {
-				if(node.dist == 0) continue;
+				if(node.time == 0) continue;
 
 				int des = node.vertex;
-				int nextDist = curDist + node.dist;
+				int nextTime = curTime + node.time;
 				
-				if(nextDist < distances[des]) {
-					distances[des] = nextDist;
-					minHeap.offer(new Node(des, nextDist));
+				if(nextTime < costs[des]) {
+					costs[des] = nextTime;
+					minHeap.offer(new Node(des, nextTime));
 				}
 			}
 		}
 		
-		return distances;
+		return costs;
 	}
 	
-	private static int longestTime(int [][] allDistances, int x) {
+	private static int longestTime(int [] costFromX, int [] costToX) {
 		int max = Integer.MIN_VALUE;
 		
-		for(int i = 1; i <= n; i++)
-			max = Math.max(max, allDistances[i][x] + allDistances[x][i]);
+		for(int i = 1; i <= n; i++) max = Math.max(max, costFromX[i] + costToX[i]);
 		
 		return max;
 	}
@@ -69,20 +67,28 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken()); 
 		int m = Integer.parseInt(st.nextToken()), x = Integer.parseInt(st.nextToken());
-		int [][] allDistances = new int [n + 1][n + 1];
 		
-		graph = new ArrayList<>();
-		for(int i = 0; i <= n; i++) graph.add(new ArrayList<>());
+		ArrayList<ArrayList<Node>> graph = new ArrayList<>();
+		ArrayList<ArrayList<Node>> reverseGraph = new ArrayList<>();
+		for(int i = 0; i <= n; i++) {
+			graph.add(new ArrayList<>());
+			reverseGraph.add(new ArrayList<>());
+		}
 		
 		for(int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
+			int src = Integer.parseInt(st.nextToken());
+			int des = Integer.parseInt(st.nextToken());
+			int time = Integer.parseInt(st.nextToken());
 			
-			graph.get(Integer.parseInt(st.nextToken()))
-				.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+			graph.get(src).add(new Node(des, time));
+			reverseGraph.get(des).add(new Node(src, time));
 		}
 		
-		for(int i = 1; i <= n; i++) allDistances[i] = dijkstra(i);
+		// X에서 모든 노드까지의 거리와 모든 노드에서 X까지의 거리 계산
+		int [] costFromX = dijkstra(graph, x);
+		int [] costToX = dijkstra(reverseGraph, x);
 		
-		System.out.print(longestTime(allDistances, x));
+		System.out.print(longestTime(costFromX, costToX));
 	}
 }
