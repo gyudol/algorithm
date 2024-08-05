@@ -38,11 +38,9 @@ public class Main {
 			
 			if(curTime > costs[curVertex]) continue;
 			
-			for(Node node : graph.get(curVertex)) {
-				if(node.time == 0) continue;
-
-				int des = node.vertex;
-				int nextTime = curTime + node.time;
+			for(Node nextNode : graph.get(curVertex)) {
+				int des = nextNode.vertex;
+				int nextTime = curTime + nextNode.time;
 				
 				if(nextTime < costs[des]) {
 					costs[des] = nextTime;
