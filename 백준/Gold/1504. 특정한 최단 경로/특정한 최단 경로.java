@@ -40,8 +40,6 @@ public class Main {
 			if(curDist > distances[curVertex]) continue;
 			
 			for(Node nextNode : graph.get(curVertex)) {
-				if(nextNode.dist == 0) continue;
-				
 				int nextVertex = nextNode.vertex;
 				int nextDist = curDist + nextNode.dist;
 				
