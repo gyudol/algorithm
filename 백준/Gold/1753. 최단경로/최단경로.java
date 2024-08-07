@@ -6,7 +6,6 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static final String INF = "INF";
 	private static int vCnt;
 	private static ArrayList<ArrayList<Node>> graph;
 	
@@ -74,8 +73,10 @@ public class Main {
 		}
 		
 		int [] fromStart = dijkstra(start);
-		for(int i = 1; i <= vCnt; i++) 
-			result.append(fromStart[i] == Integer.MAX_VALUE ? INF : fromStart[i]).append('\n');
+		for(int i = 1; i <= vCnt; i++) {
+			if(fromStart[i] == Integer.MAX_VALUE) result.append('I').append('N').append('F').append('\n');
+			else result.append(fromStart[i]).append('\n');
+		}
 		
 		System.out.print(result);
 	}
