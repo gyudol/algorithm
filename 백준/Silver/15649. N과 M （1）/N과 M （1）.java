@@ -1,28 +1,28 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
 	private static final int MAX = 8;
-	private static List<List<Integer>> comb;
+	private static StringBuilder result;
 	private static int N;
 	private static int M;
 	
-	public static void generate(List<Integer> tokens, boolean [] isVisited, int src) {
-		if(tokens.size() == M) {
-			comb.add(new ArrayList<>(tokens));
+	public static void generate(int depth, int [] tokens, boolean [] isVisited) {
+		if(depth == M) {
+			for(int token : tokens) result.append(token).append(' ');
+			result.append('\n');
+			
 			return;
 		}
 		
-		for(int i = src; i <= N; i++) {
+		for(int i = 1; i <= N; i++) {
 			if(isVisited[i]) continue;
-			
 			isVisited[i] = true;
-			tokens.add(i);
-			generate(tokens, isVisited, 1);
-			tokens.remove(tokens.size() - 1);
+			tokens[depth] = i;
+			
+			generate(depth + 1, tokens, isVisited);
+			
 			isVisited[i] = false;
 		}
 	}
@@ -31,15 +31,9 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken()); M = Integer.parseInt(st.nextToken());
-		StringBuilder result = new StringBuilder();
-		comb = new ArrayList<>();
+		result = new StringBuilder();
 		
-		generate(new ArrayList<>(), new boolean [MAX + 1], 1);
-		
-		for(List<Integer> tokens : comb) {
-			for(int num : tokens) result.append(num).append(' ');
-			result.append('\n');
-		}
+		generate(0, new int [M], new boolean [MAX + 1]);
 		
 		System.out.print(result);
 	}
