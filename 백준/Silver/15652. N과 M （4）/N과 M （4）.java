@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -9,8 +7,8 @@ public class Main {
 	private static int M;
 	private static StringBuilder result;
 	
-	private static void generate(List<Integer> tokens, int src) {
-		if(tokens.size() == M) {
+	private static void generate(int src, int depth, int [] tokens) {
+		if(depth == M) {
 			for(int num : tokens) result.append(num).append(' ');
 			result.append('\n');
 			
@@ -18,9 +16,9 @@ public class Main {
 		}
 		
 		for(int i = src; i <= N; i++) {
-			tokens.add(i);
-			generate(tokens, i);
-			tokens.remove(tokens.size() - 1);
+			tokens[depth] = i;
+			
+			generate(i, depth + 1, tokens);
 		}
 	}
 	
@@ -30,7 +28,8 @@ public class Main {
 		N = Integer.parseInt(st.nextToken()); M = Integer.parseInt(st.nextToken());
 		result = new StringBuilder();
 		
-		generate(new ArrayList<>(), 1);
+		generate(1, 0, new int [M]);
+		
 		System.out.print(result);
 	}
 }
