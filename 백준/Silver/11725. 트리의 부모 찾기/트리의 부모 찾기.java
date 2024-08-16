@@ -9,10 +9,11 @@ public class Main {
 	private static ArrayList<ArrayList<Integer>> edges;
 	
 	private static void dfs(int src, boolean [] isVisited) {
+		isVisited[src] = true;
+		
 		for(int des : edges.get(src)) {
 			if(isVisited[des]) continue;
 			
-			isVisited[des] = true;
 			tree[des] = src;
 			
 			dfs(des, isVisited);
