@@ -61,8 +61,11 @@ public class Main {
 		n = Integer.parseInt(st.nextToken()); m = Integer.parseInt(st.nextToken());
 		map = new int [n][m];
 		
-		for(int i = 0; i < n; i++) map[i] = Arrays.stream(br.readLine().split(""))
-				.mapToInt(Integer::parseInt).toArray();
+		for(int i = 0; i < n; i++) {
+			int j = 0;
+			
+			for(char c : br.readLine().toCharArray()) map[i][j++] = c - '0';
+		}
 		
 		System.out.print(bfs());
 	}
