@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static final long MAX = 10000000001L;
+	private static final long INF = 10000000001L;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,7 +13,7 @@ public class Main {
 		int m = Integer.parseInt(br.readLine());
 		long [][] buses = new long [n + 1][n + 1];
 		
-		for(long [] costs : buses) Arrays.fill(costs, MAX);
+		for(long [] costs : buses) Arrays.fill(costs, INF);
 		for(int i = 1; i <= n; i++) buses[i][i] = 0;
 		
 		for(int i = 0; i < m; i++) {
@@ -36,7 +36,7 @@ public class Main {
 			for(int j = 1; j <= n; j++) {
 				long cost = buses[i][j];
 				
-				if(cost >= MAX) result.append(0).append(' ');
+				if(cost == INF) result.append(0).append(' ');
 				else result.append(cost).append(' ');
 			}
 			
