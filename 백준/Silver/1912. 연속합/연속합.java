@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -13,12 +12,10 @@ public class Main {
 		int[] dp = new int[n + 1];
 		int max = MIN;
 		
-		Arrays.fill(dp, MIN);
-		
 		for(int i = 1; i <= n; i++) {
 			int num = Integer.parseInt(st.nextToken());
 			
-			dp[i] = Math.max(num, dp[i - 1] + num);
+			dp[i] = Math.max(num + dp[i - 1], num);
 			max = Math.max(max, dp[i]);
 		}
 		
