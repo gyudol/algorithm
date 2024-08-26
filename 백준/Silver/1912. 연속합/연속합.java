@@ -3,14 +3,12 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static final int MIN = -100000001;
-	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int[] dp = new int[n + 1];
-		int max = MIN;
+		int max = Integer.MIN_VALUE;
 		
 		for(int i = 1; i <= n; i++) {
 			int num = Integer.parseInt(st.nextToken());
