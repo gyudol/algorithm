@@ -7,21 +7,18 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
-		int cnt = 0;
-		int[] arr = new int[n + 1];
+		int cnt = 0, src = 0, des = 1;
+		int[] pSum = new int[n + 1];
 		
 		st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < n; i++) arr[i] = Integer.parseInt(st.nextToken());
+		for(int i = 1; i <= n; i++) pSum[i] = Integer.parseInt(st.nextToken()) + pSum[i - 1];
 		
-		for(int src = 0; src < n; src++) {
-			int sum = 0;
+		while(src <= n && des <= n) {
+			int sum = pSum[des] - pSum[src];
 			
-			for(int des = src; des < n; des++) {
-				sum += arr[des];
-				
-				if(sum == m) cnt++;
-				if(sum >= m) break;
-			}
+			if(sum == m) cnt++;
+			if(sum >= m) src++;
+			else des++;
 		}
 		
 		System.out.print(cnt);
