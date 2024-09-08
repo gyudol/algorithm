@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -23,10 +24,11 @@ public class Main {
 		}
 	}
 	
-	private static int bfs(int n, int[][] rupoors) {
+	private static int dijkstra(int n, int[][] rupoors) {
 		PriorityQueue<State> minHeap = new PriorityQueue<>();
-		boolean[][] isVisited = new boolean[n][n];
+		int[][] dist = new int[n][n];
 		
+		for(int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
 		minHeap.offer(new State(0, 0, rupoors[0][0]));
 		
 		while(!minHeap.isEmpty()) {
@@ -38,11 +40,13 @@ public class Main {
 			for(int[] d : DIR) {
 				int nextRow = row + d[0], nextCol = col + d[1];
 				
-				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n 
-						|| isVisited[nextRow][nextCol]) continue;
-				isVisited[row][col] = true;
+				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
 				
-				minHeap.offer(new State(nextRow, nextCol, rupoor + rupoors[nextRow][nextCol]));
+				int nextRupoor = rupoor + rupoors[nextRow][nextCol];
+				
+				if(nextRupoor >= dist[nextRow][nextCol]) continue;
+				dist[nextRow][nextCol] = nextRupoor;
+				minHeap.offer(new State(nextRow, nextCol, nextRupoor));
 			}
 		}
 		
@@ -68,7 +72,7 @@ public class Main {
 			}
 			
 			result.append('P').append('r').append('o').append('b').append('l').append('e').append('m')
-				.append(' ').append(tc++).append(':').append(' ').append(bfs(n, rupoors)).append('\n');
+				.append(' ').append(tc++).append(':').append(' ').append(dijkstra(n, rupoors)).append('\n');
 		}
 		
 		System.out.print(result);
