@@ -27,9 +27,9 @@ public class Main {
 	private static int dijkstra(int n, int[][] rupoors) {
 		PriorityQueue<State> minHeap = new PriorityQueue<>();
 		int[][] dist = new int[n][n];
-		
+
+		minHeap.offer(new State(0, 0, dist[0][0] = rupoors[0][0]));
 		for(int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
-		minHeap.offer(new State(0, 0, rupoors[0][0]));
 		
 		while(!minHeap.isEmpty()) {
 			State state = minHeap.poll();
