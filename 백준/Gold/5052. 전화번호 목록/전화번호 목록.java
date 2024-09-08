@@ -8,9 +8,7 @@ public class Main {
 		private Map<Character, Node> children = new HashMap<>();
 		
 		private void add(String phone, int offset) {
-			int length = phone.length() - offset;
-		
-			if(length > 0) {
+			if(offset < phone.length()) {
 				char c = phone.charAt(offset);
 				Node child = children.getOrDefault(c, new Node());
 				
@@ -53,10 +51,9 @@ public class Main {
 			
 			for(int i = 0; i < N; i++) {
 				phones[i] = br.readLine();
-				trie.add(phones[i], 0);
-				int len = phones[i].length();
 				
-				if(len > maxLen) maxLen = len;
+				trie.add(phones[i], 0);
+				maxLen = Math.max(maxLen, phones[i].length());
 			}
 			
 			if(isConsistent(trie, phones, maxLen)) result.append('Y').append('E').append('S').append('\n');
