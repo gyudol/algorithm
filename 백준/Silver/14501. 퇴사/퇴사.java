@@ -28,10 +28,9 @@ public class Main {
 		for(int i = 0; i < N; i++) {
 			int nextDay = i + counseling[i].time;
 			
-			if(nextDay > N) continue;
+			if(nextDay <= N) dp[nextDay] = Math.max(dp[nextDay], dp[i] + counseling[i].revenue);
 			
-			dp[nextDay] = Math.max(dp[nextDay], dp[i] + counseling[i].revenue);
-			for(int j = nextDay + 1; j <= N; j++) dp[j] = Math.max(dp[j], dp[nextDay]);
+			dp[i + 1] = Math.max(dp[i + 1], dp[i]);
 		}
 		
 		System.out.print(dp[N]);
