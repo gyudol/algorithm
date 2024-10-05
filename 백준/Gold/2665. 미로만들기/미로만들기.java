@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -25,31 +26,33 @@ public class Main {
 	}
 	
 	private static int difkstra() {
-		boolean[][] isVisited = new boolean[N][N];
 		PriorityQueue<Room> minHeap = new PriorityQueue<>();
+		int[][] dist = new int[N][N];
 		
+		for(int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
 		minHeap.offer(new Room(0, 0, 0));
-		isVisited[0][0] = true;
+		dist[0][0] = 0;
 		
 		while(!minHeap.isEmpty()) {
 			Room room = minHeap.poll();
 			int row = room.row, col = room.col, changedCnt = room.changedCnt;
 			
-			if(row == N - 1 && col == N - 1) return changedCnt;
+			if(changedCnt > dist[row][col]) continue;
 			
 			for(int[] d : DIR) {
 				int nextRow = row + d[0], nextCol = col + d[1];
 				
-				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N
-						|| isVisited[nextRow][nextCol]) continue;
-				isVisited[nextRow][nextCol] = true;
+				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) continue;
 				int nextChangedCnt = changedCnt + (maze[nextRow][nextCol] == '1' ? 0 : 1);
 				
-				minHeap.offer(new Room(nextRow, nextCol, nextChangedCnt));
+				if(nextChangedCnt < dist[nextRow][nextCol]) {
+					minHeap.offer(new Room(nextRow, nextCol, nextChangedCnt));
+					dist[nextRow][nextCol] = nextChangedCnt;
+				}
 			}
 		}
 		
-		return -1;
+		return dist[N - 1][N - 1];
 	}
 	
 	public static void main(String[] args) throws Exception {
