@@ -14,26 +14,26 @@ public class Main {
 	private static ArrayList<ArrayList<Integer>> roads;
 	
 	private static List<Integer> bfs() {
-		Queue<Integer> minHeap = new LinkedList<>();
+		Queue<Integer> cities = new LinkedList<>();
 		int[] dist = new int[N + 1];
 		
 		Arrays.fill(dist, Integer.MAX_VALUE);
 		dist[X] = 0;
 		
 		for(int des : roads.get(X)) {
-			minHeap.offer(des);
+			cities.offer(des);
 			dist[des] = 1;
 		}
 		
-		while(!minHeap.isEmpty()) {
-			int src = minHeap.poll();
+		while(!cities.isEmpty()) {
+			int src = cities.poll();
 			
 			if(dist[src] + 1 > K) break;
 			
 			for(int des : roads.get(src)) {
 				if(dist[des] <= dist[src] + 1) continue;
 				
-				minHeap.offer(des);
+				cities.offer(des);
 				dist[des] = dist[src] + 1;
 			}	
 		}
