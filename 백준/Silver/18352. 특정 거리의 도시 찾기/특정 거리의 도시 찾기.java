@@ -2,52 +2,40 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Main {
-	private static int N;
-	private static int K;
-	private static int X;
+	private static int N, K, X;
 	private static ArrayList<ArrayList<Integer>> roads;
 	
-	private static class Road implements Comparable<Road> {
-		private int des;
-		private int cost;
-		
-		private Road(int des, int cost) {
-			this.des = des;
-			this.cost = cost;
-		}
-		
-		@Override
-		public int compareTo(Road other) {
-			return Integer.compare(cost, other.cost);
-		}
-	}
-	
-	private static List<Integer> dijkstra() {
-		PriorityQueue<Road> minHeap = new PriorityQueue<>();
+	private static List<Integer> bfs() {
+		Queue<Integer> minHeap = new LinkedList<>();
 		int[] dist = new int[N + 1];
 		
 		Arrays.fill(dist, Integer.MAX_VALUE);
 		dist[X] = 0;
 		
-		for(int des : roads.get(X)) minHeap.offer(new Road(des, 1));
+		for(int des : roads.get(X)) {
+			minHeap.offer(des);
+			dist[des] = 1;
+		}
 		
 		while(!minHeap.isEmpty()) {
-			Road road = minHeap.poll();
-			int src = road.des, cost = road.cost;
+			int src = minHeap.poll();
 			
-			if(cost > dist[src]) continue;
-			dist[src] = cost;
+			if(dist[src] + 1 > K) break;
 			
 			for(int des : roads.get(src)) {
-				if(cost + 1 < dist[des]) minHeap.offer(new Road(des, cost + 1));
-			}
+				if(dist[des] <= dist[src] + 1) continue;
+				
+				minHeap.offer(des);
+				dist[des] = dist[src] + 1;
+			}	
 		}
 		
 		return IntStream.range(1, dist.length)
@@ -69,7 +57,7 @@ public class Main {
 			roads.get(Integer.parseInt(st.nextToken())).add(Integer.parseInt(st.nextToken()));
 		}
 		
-		List<Integer> kList = dijkstra();
+		List<Integer> kList = bfs();
 		
 		if(kList.isEmpty()) result.append(-1);
 		else {
