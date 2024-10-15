@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
 	private static StringBuilder result;
@@ -36,8 +35,11 @@ public class Main {
 		N = Integer.parseInt(br.readLine());
 		video = new int[N][N];
 		
-		for(int i = 0; i < N; i++) video[i] = Arrays.stream(br.readLine().split(""))
-				.mapToInt(Integer::parseInt).toArray();
+		for(int row = 0; row < N; row++) {
+			String line = br.readLine();
+			
+			for(int col = 0; col < N; col++) video[row][col] = line.charAt(col) - '0';
+		}
 		
 		compress(0, 0, N);
 		System.out.print(result);
