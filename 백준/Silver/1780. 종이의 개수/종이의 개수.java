@@ -15,17 +15,11 @@ public class Main {
 			for(int col = srcCol; col < srcCol + size; col++) {
 				if(confetti[row][col] == tmp) continue;
 				
-				int triple = size / 3;
+				int part = size / 3;
 				
-				compress(srcRow, srcCol, triple);
-				compress(srcRow, srcCol + triple, triple);
-				compress(srcRow, srcCol + 2 * triple, triple);
-				compress(srcRow + triple, srcCol, triple);
-				compress(srcRow + triple, srcCol + triple, triple);
-				compress(srcRow + triple, srcCol + 2 * triple, triple);
-				compress(srcRow + 2 * triple, srcCol, triple);
-				compress(srcRow + 2 * triple, srcCol + triple, triple);
-				compress(srcRow + 2 * triple, srcCol + 2 * triple, triple);
+				for(int i = srcRow; i < srcRow + size; i += part) {
+					for(int j = srcCol; j < srcCol + size; j += part) compress(i, j, part);
+				}
 				
 				return;
 			}
