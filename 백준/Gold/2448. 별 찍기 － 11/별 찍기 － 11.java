@@ -31,10 +31,7 @@ public class Main {
 		for(char[] row : stars) Arrays.fill(row, ' ');
 		buildStars(0, N - 1, N);	// (0, N - 1) is top
 		
-		for(char[] row : stars) {
-			for(char star : row) result.append(star);
-			result.append('\n');
-		}
+		for(char[] row : stars) result.append(row).append('\n');
 		
 		System.out.print(result);
 	}
