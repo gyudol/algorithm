@@ -11,20 +11,22 @@ public class Solution {
 		
 		for(int tc = 1; tc <= T; tc++) {
 			final int N = Integer.parseInt(br.readLine());
-			int row = 0, col = 0, rot = 0, num = 0;
+			int row = 0, col = 0, sign = 0, num = 0;
 			int[][] snail = new int[N][N];
 			
-			while(++num < N * N) {
+			while(++num <= N * N) {
 				snail[row][col] = num;
+                
+                int nextRow = row + DIR[sign][0], nextCol = col + DIR[sign][1];
 				
-				while(row + DIR[rot][0] < 0 || row + DIR[rot][0] >= N || col + DIR[rot][1] < 0 ||
-						col + DIR[rot][1] >= N || snail[row + DIR[rot][0]][col + DIR[rot][1]] != 0) rot = (rot + 1) % DIR.length;
+				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N 
+                      || snail[nextRow][nextCol] != 0) {
+                    sign = (sign + 1) % DIR.length;
+                    nextRow = row + DIR[sign][0];	nextCol = col + DIR[sign][1];
+                }
 				
-				row += DIR[rot][0];
-				col += DIR[rot][1];
+				row = nextRow;	col = nextCol;
 			}
-			
-			snail[row][col] = num;
 			
 			result.append('#').append(tc).append('\n');
 			for(int[] line : snail) {
