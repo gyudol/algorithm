@@ -17,13 +17,13 @@ public class Solution {
 			while(++num <= N * N) {
 				snail[row][col] = num;
                 
-                int nextRow = row + DIR[sign][0], nextCol = col + DIR[sign][1];
+				int nextRow = row + DIR[sign][0], nextCol = col + DIR[sign][1];
 				
 				if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N 
-                      || snail[nextRow][nextCol] != 0) {
-                    sign = (sign + 1) % DIR.length;
-                    nextRow = row + DIR[sign][0];	nextCol = col + DIR[sign][1];
-                }
+						|| snail[nextRow][nextCol] != 0) {
+					sign = (sign + 1) % DIR.length;
+					nextRow = row + DIR[sign][0];	nextCol = col + DIR[sign][1];
+				}
 				
 				row = nextRow;	col = nextCol;
 			}
