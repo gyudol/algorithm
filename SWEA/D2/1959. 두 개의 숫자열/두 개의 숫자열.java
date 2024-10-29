@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
  
 public class Solution {
@@ -21,7 +20,7 @@ public class Solution {
         	st = new StringTokenizer(br.readLine());
         	for(int i = 0; i < B.length; i++) B[i] = Integer.parseInt(st.nextToken());
         	
-        	if(N > M) {		// swap
+        	if(N > M) {	// swap
         		int[] tmp = A;
         		A = B;
         		B = tmp;
