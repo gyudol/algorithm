@@ -36,7 +36,7 @@ public class Solution {
         	for(int row = 0; row < N; row++) {
         		for(int cnt = 1; cnt < COUNT; cnt++) {
         			for(int col = 0; col < N; col++) result.append(matrix[cnt][row][col]);
-            		result.append(' ');
+        			result.append(' ');
         		}
         		
         		result.append('\n');
