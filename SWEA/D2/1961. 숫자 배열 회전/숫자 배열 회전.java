@@ -9,7 +9,7 @@ public class Solution {
 		int[][] rotated = new int[N][N];
 		
 		for(int i = 0; i < rotated.length; i++) {
-			for(int j = 0; j < rotated.length;j++) rotated[i][j] = matrix[N - 1 - j][i];
+			for(int j = 0; j < rotated.length; j++) rotated[i][j] = matrix[N - 1 - j][i];
 		}
 		
 		return rotated;
