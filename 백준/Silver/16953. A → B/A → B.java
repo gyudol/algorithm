@@ -26,7 +26,7 @@ public class Main {
 			
 			if(value == B) return depth;
 			
-			long[] nextValues = new long[] {value * 2, Long.parseLong(Long.toString(value) + '1')};
+			long[] nextValues = new long[] {value * 2, value * 10 + 1};
 			
 			for(long nextValue : nextValues) {
 				if(nextValue <= B) q.offer(new State(nextValue, depth + 1));
