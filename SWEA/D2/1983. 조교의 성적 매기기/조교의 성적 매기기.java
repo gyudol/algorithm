@@ -43,7 +43,7 @@ public class Solution {
 			
 			Arrays.sort(total);
 			result.append('#').append(tc).append(' ')
-			.append(GRADES[indexOf(total, target) / (N / GRADES.length)]).append('\n');
+				.append(GRADES[indexOf(total, target) / (N / GRADES.length)]).append('\n');
 		}
 		
 		System.out.print(result);
