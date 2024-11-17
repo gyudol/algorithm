@@ -4,22 +4,17 @@ import java.util.StringTokenizer;
 
 public class Solution {
 	private static int getMaxFlies(int N, int M, int[][] flies) {
-		int srcRow = 0, srcCol = 0, desRow = M - 1, desCol = M - 1;
+		int[][] prefixSum = new int[N + 1][N + 1];
 		int max = Integer.MIN_VALUE;
 		
-		while(desRow < N) {
-			int sum = 0;
-			
-			for(int row = srcRow; row <= desRow; row++) {
-				for(int col = srcCol; col <= desCol; col++) sum += flies[row][col];
-			}
-			
-			max = Math.max(sum, max);
-			srcCol++;	desCol++;
-			if(desCol >= N) {
-				srcRow++;	desRow++;
-				srcCol = 0;	desCol = M - 1;
-			}
+		for(int row = 1; row <= N; row++) {
+			for(int col = 1; col <= N; col++) prefixSum[row][col] = flies[row - 1][col - 1] + prefixSum[row - 1][col] 
+						+ prefixSum[row][col - 1] - prefixSum[row - 1][col - 1];
+		}
+		
+		for(int row = M; row <= N; row++) {
+			for(int col = M; col <= N; col++) max = Math.max(max, prefixSum[row][col] - prefixSum[row - M][col] 
+					- prefixSum[row][col - M] + prefixSum[row - M][col - M]);
 		}
 		
 		return max;
