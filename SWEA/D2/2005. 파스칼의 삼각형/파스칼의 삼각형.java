@@ -9,17 +9,17 @@ public class Solution {
 		
 		for(int tc = 1; tc <= T; tc++) {
 			final int N = Integer.parseInt(br.readLine());
-			int[][] paskal = new int[N + 1][N + 1];
+			int[][] pascal = new int[N + 1][N + 1];
 			
 			result.append('#').append(tc).append('\n');
-			result.append(paskal[1][1] = 1).append('\n');
+			result.append(pascal[1][1] = 1).append('\n');
 			
 			for(int row = 2; row <= N; row++) {
 				for(int col = 1; col <= N; col++) {
-					paskal[row][col] = paskal[row - 1][col - 1] + paskal[row - 1][col];
+					pascal[row][col] = pascal[row - 1][col - 1] + pascal[row - 1][col];
 					
-					if(paskal[row][col] == 0) break;
-					result.append(paskal[row][col]).append(' ');
+					if(pascal[row][col] == 0) break;
+					result.append(pascal[row][col]).append(' ');
 				}
 				
 				result.append('\n');
