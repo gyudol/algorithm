@@ -7,7 +7,7 @@ public class Solution {
 	private static boolean isPattern(String str, String sub) {
 		int offset = sub.length();
 		
-		for(int src = offset; src < str.length() / offset * offset; src += offset) {
+		for(int src = offset; src + offset <= str.length(); src += offset) {
 			if(!str.substring(src, src + offset).equals(sub)) return false;
 		}
 		
