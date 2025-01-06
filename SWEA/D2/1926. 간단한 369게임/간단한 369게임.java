@@ -8,7 +8,7 @@ public class Solution {
 		int clap = 0;
 		
 		for(char c : Integer.toString(num).toCharArray()) {
-			if(c != '0' && c % MOD == 0) clap++;
+			if(c != '0' && (c - '0') % MOD == 0) clap++;
 		}
 		
 		if(clap == 0) return Integer.toString(num);
