@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
-	private static int dfs(int sum, int src, int N, int B, int S, int[] heights) {
+	private static int dfs(int sum, int src, int N, int B, int[] heights) {
 		if(sum >= B) return sum;
 		
 		int min = Integer.MAX_VALUE;
 		
-		for(int i = src; i < N; i++) min = Math.min(min, dfs(sum + heights[i], i + 1, N, B, S, heights));
+		for(int i = src; i < N; i++) min = Math.min(min, dfs(sum + heights[i], i + 1, N, B, heights));
 		
 		return min;
 	}
@@ -22,17 +22,13 @@ public class Solution {
 		 for(int tc = 1; tc <= T; tc++) {
 			 StringTokenizer st = new StringTokenizer(br.readLine());
 			 final int N = Integer.parseInt(st.nextToken()), B = Integer.parseInt(st.nextToken());
-			 int S = 0;
 			 int[] heights = new int[N];
 			 
 			 st = new StringTokenizer(br.readLine());
-			 for(int i = 0; i < N; i++) {
-				 heights[i] = Integer.parseInt(st.nextToken());
-				 S += heights[i];
-			 }
+			 for(int i = 0; i < N; i++) heights[i] = Integer.parseInt(st.nextToken());
 			 
 			 Arrays.sort(heights);
-			 result.append('#').append(tc).append(' ').append(dfs(0, 0, N, B, S, heights) - B).append('\n');
+			 result.append('#').append(tc).append(' ').append(dfs(0, 0, N, B, heights) - B).append('\n');
 		 }
 		 
 		 System.out.print(result);
