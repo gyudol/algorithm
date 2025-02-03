@@ -1,23 +1,19 @@
-import java.util.Arrays;
-import java.util.stream.IntStream;
-
 class Solution {
     private static final int LENGTH = 26;
-    
-    private char caesarCipher(char c, int n) {
+
+    private char caesarEncryption(char c, int n) {
         if(c == ' ') return c;
+
+        int offset = c >= 'a' && c <= 'z' ? 'a' : 'A';
+        int pos = c - offset;
         
-        char offset = c >= 'A' && c <= 'Z' ? 'A' : 'a';
-        
-        return (char) ((c - offset + n) % LENGTH + offset);
+        return (char) (((pos + n) % LENGTH) + offset);
     }
     
     public String solution(String s, int n) {
-        return IntStream.range(0, s.length())
-            .map(i -> caesarCipher(s.charAt(i), n))
-            .collect(StringBuilder::new,
-                    StringBuilder::appendCodePoint,
-                    StringBuilder::append)
-            .toString();
+        StringBuilder result = new StringBuilder();
+
+        for(char c : s.toCharArray()) result.append(caesarEncryption(c, n));
+        return result.toString();
     }
 }
