@@ -4,47 +4,34 @@ import java.util.StringTokenizer;
 
 public class Main {
 	private static final int N = 19;
-	private static final int WINNING_COUNT = 5;
-	private static final int[][] DIRECTIONS = {{-1, 1}, {0, 1}, {1, 1}, {1, 0}};
+	private static final int[][] DIR = {{-1, 1}, {0, 1}, {1, 1}, {1, 0}};
+	private static boolean[][][] isVisited;
 	private static StringBuilder result = new StringBuilder();
 	
-	private static boolean isPromising(int[][] board, int row, int col, int[] d) {
-		int prevRow = row - d[0], prevCol = col - d[1];
+	private static boolean isPromising(int[][] board, int row, int col, int dIdx) {
+		int pos = board[row][col], cnt = 0;
 		
-		if(prevRow >= 0 && prevRow < N && prevCol >= 0 
-				&& board[prevRow][prevCol] == board[row][col]) return false;
-
-		int upcomingRow = row + d[0] * WINNING_COUNT, upcomingCol = col + d[1] * WINNING_COUNT;
-		
-		if(upcomingRow >= 0 && upcomingRow < N && upcomingCol < N 
-				&& board[upcomingRow][upcomingCol] == board[row][col]) return false;
-		
-		return true;
-	}
-	
-	private static boolean checkWinner(int[][] board, int row, int col) {
-		int pos = board[row][col];
-		
-		C : for(int[] d : DIRECTIONS) {
-			if(!isPromising(board, row, col, d)) continue;
-			
-			for(int offset = 1; offset < WINNING_COUNT; offset++) {
-				int nextRow = row + d[0] * offset, nextCol = col + d[1] * offset;
-				
-				if(nextRow < 0 || nextRow >= N || nextCol >= N || board[nextRow][nextCol] != pos) continue C;
-			}
-			
-			result.append(pos).append('\n').append(row + 1).append(' ').append(col + 1);
-			return true;
+		while(row >= 0 && row < N && col < N && board[row][col] == pos && !isVisited[row][col][dIdx]) {
+			isVisited[row][col][dIdx] = true;
+			row += DIR[dIdx][0];	col += DIR[dIdx][1];
+			cnt++;
 		}
 		
+		if(cnt == 5) return true;
 		return false;
 	}
 	
 	private static void gomoku(int[][] board) {
-		for(int row = 0; row < N; row++) {
-			for(int col = 0; col < N; col++) {
-				if(board[row][col] != 0 && checkWinner(board, row, col)) return;
+		for(int col = 0; col < N; col++) {
+			for(int row = 0; row < N; row++) {
+				if(board[row][col] == 0) continue;
+				
+				for(int dIdx = 0; dIdx < DIR.length; dIdx++) {
+					if(isPromising(board, row, col, dIdx)) {
+						result.append(board[row][col]).append('\n').append(row + 1).append(' ').append(col + 1);
+						return;
+					}
+				}
 			}
 		}
 		
@@ -54,6 +41,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		final int[][] board = new int[N][N];
+		isVisited = new boolean[N][N][DIR.length];
 		
 		for(int row = 0; row < N; row++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
