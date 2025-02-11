@@ -1,34 +1,33 @@
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 
 class Solution {
     public int[] solution(String[] id_list, String[] report, int k) {
-        int[] answer = new int[id_list.length];
-        Map<String, Set<String>> reportLog = new HashMap<>();
-        Map<String, Integer> reporterCnt = new HashMap<>();
+        Map<String, Set<String>> reportedMap = new HashMap<>();
+        Map<String, Integer> terminal = new HashMap<>();
+        int[] mails = new int[id_list.length];
+        int idx = 0;
         
         for(String id : id_list) {
-            reportLog.put(id, new HashSet<>());
-            reporterCnt.put(id, 0);
+            reportedMap.put(id, new HashSet<>());
+            terminal.put(id, idx++);
         }
         
-        for(int i = 0; i < report.length; i++) {
-            String[] sliced = report[i].split(" ");
+        for(String relation : report) {
+            String[] people = relation.split(" ");
             
-            reportLog.get(sliced[1]).add(sliced[0]);
+            reportedMap.get(people[1]).add(people[0]);
         }
         
-        for(String reported : reportLog.keySet()) {
-            if(reportLog.get(reported).size() < k) continue;
+        for(int i = 0; i < mails.length; i++) {
+            if(reportedMap.get(id_list[i]).size() < k) continue;
             
-            for(String reporter : reportLog.get(reported))
-                reporterCnt.put(reporter, reporterCnt.get(reporter) + 1);
-        } 
+            for(String recipient : reportedMap.get(id_list[i]))
+                mails[terminal.get(recipient)]++;
+        }
         
-        for(int i = 0; i < id_list.length; i++) answer[i] = reporterCnt.get(id_list[i]);
-        
-        return answer;
+        return mails;
     }
 }
