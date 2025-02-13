@@ -1,92 +1,68 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
 	private static final int N = 5;
 	private static final int TARGET = 3;
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	
-	private static boolean isBingo(int[][] board) {
-		int lineCnt = 0;
+	private static boolean checkBingo(int[][] board) {
+		int bingo = 0, downDiag = 0, upDiag = 0;
 		
-		for(int row = 0; row < N; row++) {
-			int erasedCnt = 0;
+		for(int i = 0; i < N; i++) {
+			int row = 0, col = 0;
 			
-			for(int col = 0; col < N; col++) {
-				if(board[row][col] == 0) erasedCnt++;
+			for(int j = 0; j < N; j++) {
+				row += board[i][j];
+				col += board[j][i];
+				
+				if(i == j) downDiag += board[i][i];
+				if(i + j == N - 1) upDiag += board[i][j];
 			}
 			
-			if(erasedCnt == N) lineCnt++;
+			if(row == 0) bingo++;
+			if(col == 0) bingo++;
 		}
 		
-		for(int col = 0; col < N; col++) {
-			int erasedCnt = 0;
-			
-			for(int row = 0; row < N; row++) {
-				if(board[row][col] == 0) erasedCnt++;
-			}
-			
-			if(erasedCnt == N) lineCnt++;
-		}
+		if(downDiag == 0) bingo++;
+		if(upDiag == 0) bingo++;
 		
-		int erasedCnt = 0;
-		
-		for(int row = 0, col = 0; row < N; row++, col++) {
-			if(board[row][col] == 0) erasedCnt++;
-		}
-		
-		if(erasedCnt == N) lineCnt++;
-		
-		erasedCnt = 0;
-		
-		for(int row = 4, col = 0; col < N; row--, col++) {
-			if(board[row][col] == 0) erasedCnt++;
-		}
-		
-		if(erasedCnt == N) lineCnt++;
-		
-		return lineCnt >= TARGET;
+		return bingo >= TARGET;
 	}
 	
-	private static void erase(int[][] board, int number) {
+	private static boolean playBingo(int[][] board, int num) {
 		for(int row = 0; row < N; row++) {
 			for(int col = 0; col < N; col++) {
-				if(board[row][col] == number) {
+				if(board[row][col] == num) {
 					board[row][col] = 0;
-					return;
+					return checkBingo(board);
 				}
 			}
 		}
-	}
-	
-	private static int playBingo(int[][] board, int[][] calling) {
-		for(int row = 0; row < N; row++) {
-			for(int col = 0; col < N; col++) {
-				erase(board, calling[row][col]);
-				if(isBingo(board)) return row * N + col + 1;
-			}
-		}
 		
-		return -1;
+		return false;
 	}
 	
-	private static void initialize(int[][] array) throws IOException {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int[][] board = new int[N][N];
+		
 		for(int row = 0; row < N; row++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			
 			for(int col = 0; col < N; col++) 
-				array[row][col] = Integer.parseInt(st.nextToken());
+				board[row][col] = Integer.parseInt(st.nextToken());
 		}
-	}
-	
-	public static void main(String[] args) throws Exception {
-		int[][] board = new int[N][N], calling = new int[N][N];
 		
-		initialize(board);
-		initialize(calling);
-		
-		System.out.print(playBingo(board, calling));
+		for(int row = 0; row < N; row++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			
+			for(int col = 0; col < N; col++) {
+				if(playBingo(board, Integer.parseInt(st.nextToken()))) {
+					System.out.print(row * N + col + 1);
+					return;
+				}
+			}
+		}
 	}
 }
