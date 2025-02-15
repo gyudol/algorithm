@@ -3,23 +3,15 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	private static final int MIN = 0, MAX = 10;
-	
 	private static int permutation(int[] seq) {
-		int maxLen = 0, before = MIN, cnt = 0;
+		int maxLen = 0, before = seq[0], cntAsc = 0, cntDesc = 0;
 		
 		for(int num : seq) {
-			if(num >= before) maxLen = Math.max(++cnt, maxLen);
-			else cnt = 1;
+			if(num >= before) maxLen = Math.max(++cntAsc, maxLen);
+			else cntAsc = 1;
 			
-			before = num;
-		}
-		
-		before = MAX;	cnt = 0;
-		
-		for(int num : seq) {
-			if(num <= before) maxLen = Math.max(++cnt, maxLen);
-			else cnt = 1;
+			if(num <= before) maxLen = Math.max(++cntDesc, maxLen);
+			else cntDesc = 1;
 			
 			before = num;
 		}
