@@ -20,10 +20,7 @@ public class Main {
 		if(s1.x > s2.p || s1.p < s2.x || s1.y > s2.q || s1.q < s2.y) return 'd';
 		else if((s1.x == s2.p && s1.y == s2.q) || (s1.x == s2.p && s1.p == s2.y) ||
 				(s1.p == s2.x && s1.y == s2.q) || (s1.p == s2.x && s1.q == s2.y)) return 'c';
-		else if((((s1.x >= s2.x && s1.x <= s2.p) || (s1.p >= s2.x && s1.p <= s2.p) || ((s2.x >= s1.x && s2.x <= s1.p) || (s2.p >= s1.x && s2.p <= s1.p))) 
-				&& (s1.y == s2.q || s1.q == s2.y))
-				|| (((s1.y >= s2.y && s1.y <= s2.q) || (s1.q >= s2.y && s1.q <= s2.q) || ((s2.y >= s1.y && s2.y <= s1.q) || (s2.q >= s1.y && s2.q <= s1.q)))
-						&& (s1.x == s2.p || s1.p == s2.x))) return 'b';
+		else if(s1.x == s2.p || s1.p == s2.x || s1.y == s2.q || s1.q == s2.y) return 'b';
 		return 'a';
 	}
 	
