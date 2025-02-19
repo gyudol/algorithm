@@ -8,8 +8,7 @@ class Solution {
 	private static final int[][] DIR = {{-1, 0}, {0, -1}, {0, 1}};
 	
 	private static boolean isValid(int[][] board, int row, int col) {
-		return row >= 0 && row < N && col >= 0 && col < N
-				&& board[row][col] != 0;
+		return row >= 0 && row < N && col >= 0 && col < N && board[row][col] != 0;
 	}
 	
 	private static int getDirection(int[][] board, int row, int col, int d) {
@@ -30,7 +29,6 @@ class Solution {
 		
 		while(row >= 0) {
 			d = getDirection(board, row, col, d);
-			
 			int nextRow = row + DIR[d][0], nextCol = col + DIR[d][1];
 			
 			if(!isValid(board, nextRow, nextCol)) {
