@@ -58,8 +58,10 @@ class Solution {
 			
 			for(int row = 0; row < N; row++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
+				
 				for(int col = 0; col < N; col++) {
 					board[row][col] = Integer.parseInt(st.nextToken());
+					
 					if(board[row][col] == 2) {
 						srcRow = row;
 						srcCol = col;
