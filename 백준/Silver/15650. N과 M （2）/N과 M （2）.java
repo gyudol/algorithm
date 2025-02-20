@@ -2,34 +2,29 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
-	private static StringBuilder result;
-	private static int N;
-	private static int M;
+class Main {
+	static StringBuilder result = new StringBuilder();
+	static int N, M;
 	
-	private static void generate(int src, int depth, int [] tokens) {
+	static void combination(int depth, int src, int[] seq) {
 		if(depth == M) {
-			for(int num : tokens) result.append(num).append(' ');
+			for(int num : seq) result.append(num).append(' ');
 			result.append('\n');
-			
 			return;
 		}
 		
 		for(int i = src; i <= N; i++) {
-			tokens[depth] = i;
-			
-			generate(i + 1, depth + 1, tokens);
+			seq[depth] = i;
+			combination(depth + 1, i + 1, seq);
 		}
 	}
 	
-	public static void main(String [] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		result = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken()); M= Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());	M = Integer.parseInt(st.nextToken());
 		
-		generate(1, 0, new int [M]);
-		
+		combination(0, 1, new int[M]);
 		System.out.print(result);
 	}
 }
