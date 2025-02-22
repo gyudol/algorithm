@@ -1,16 +1,14 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
 	static final char[] DNA = {'A', 'C', 'G', 'T'};
 	static int[] needed;
 	
-	static boolean isValid(Map<Character, Integer> terminal) {
+	static boolean isValid(int[] state) {
 		for(int i = 0; i < DNA.length; i++) {
-			if(terminal.get(DNA[i]) < needed[i]) return false;
+			if(state[DNA[i]] < needed[i]) return false;
 		}
 		
 		return true;
@@ -21,24 +19,20 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		final int S = Integer.parseInt(st.nextToken()), P = Integer.parseInt(st.nextToken());
 		needed = new int[DNA.length];
-		Map<Character, Integer> terminal = new HashMap<>();
+		int[] state = new int['Z'];
 		char[] words = br.readLine().toCharArray();
 		int src = 0, cnt = 0;
 		
 		st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < DNA.length; i++) {
-			needed[i] = Integer.parseInt(st.nextToken());
-			terminal.put(DNA[i], 0);
-		}
+		for(int i = 0; i < DNA.length; i++) needed[i] = Integer.parseInt(st.nextToken());
 		
-		for(int des = 0; des < S; des++) {
-			terminal.put(words[des], terminal.get(words[des]) + 1);
+		for(int des = 0; des < P - 1; des++) state[words[des]]++;
+		for(int des = P - 1; des < S; des++) {
+			state[words[des]]++;
 			
-			if(des >= P - 1) {
-				if(isValid(terminal)) cnt++;
-				terminal.put(words[src], terminal.get(words[src]) - 1);
-				src++;
-			}
+			if(isValid(state)) cnt++;
+			state[words[src]]--;
+			src++;
 		}
 		
 		System.out.print(cnt);
