@@ -1,13 +1,18 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 class Solution {
 	static int N;
-	static ArrayList<Set<Integer>> constraints;
+	static boolean[][] constraints;
+	
+	static void visit(int u, int op, int[] isVisited) {
+		isVisited[u] += op;
+		
+		for(int v = 0; v < constraints[u].length; v++) {
+			if(constraints[u][v]) isVisited[v] += op;
+		}
+	}
 	
 	static int countComb(int src, int[] isVisited) {
 		int cnt = 1;
@@ -15,13 +20,11 @@ class Solution {
 		for(int u = src; u <= N; u++) {
 			if(isVisited[u] > 0) continue;
 			
-			isVisited[u]++;
-			for(int v : constraints.get(u)) isVisited[v]++;
+			visit(u, 1, isVisited);
 			
 			cnt += countComb(u + 1, isVisited);
-			
-			isVisited[u]--;
-			for(int v : constraints.get(u)) isVisited[v]--;
+
+			visit(u, -1, isVisited);
 		}
 		
 		return cnt;
@@ -36,15 +39,13 @@ class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken()); 
 			final int M = Integer.parseInt(st.nextToken());
-			constraints = new ArrayList<>();
+			constraints = new boolean[N + 1][N + 1];
 			
-			for(int i = 0; i <= N; i++) constraints.add(new HashSet<>());
 			for(int i = 0; i < M; i++) {
 				st = new StringTokenizer(br.readLine());
 				int u = Integer.parseInt(st.nextToken()), v = Integer.parseInt(st.nextToken());
 				
-				constraints.get(u).add(v);
-				constraints.get(v).add(u);
+				constraints[u][v] = constraints[v][u] = true;
 			}
 			
 			result.append('#').append(tc).append(' ')
