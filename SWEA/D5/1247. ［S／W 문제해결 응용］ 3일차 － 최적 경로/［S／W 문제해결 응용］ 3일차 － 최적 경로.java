@@ -22,6 +22,7 @@ public class Solution {
 	}
 	
 	static void permutation(int depth, int curX, int curY, int sum, boolean[] isVisited) {
+		if(sum >= min) return;
 		if(depth == N) {
 			min = Math.min(sum + distance(curX, curY, des), min);
 			return;
