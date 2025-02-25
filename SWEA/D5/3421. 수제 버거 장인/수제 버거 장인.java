@@ -21,9 +21,7 @@ class Solution {
 			if(isVisited[u] > 0) continue;
 			
 			visit(u, 1, isVisited);
-			
 			cnt += countComb(u + 1, isVisited);
-
 			visit(u, -1, isVisited);
 		}
 		
@@ -52,6 +50,6 @@ class Solution {
 				.append(countComb(1, new int[N + 1])).append('\n');
 		}
 		
-		System.out.println(result);
+		System.out.print(result);
 	}
 }
