@@ -6,8 +6,6 @@ class Solution {
 	static int[][] film;
 	
 	static boolean isValid() {
-		if(K == 1) return true;
-		
 		for (int col = 0; col < W; col++) {
 			int cnt = 1;
 			
@@ -44,6 +42,8 @@ class Solution {
 	}
 	
 	static int performTest() {
+		if(K == 1) return 0;
+		
 		for (int i = 0; i < K; i++) {
 			if (comb(0, 0, i)) return i;
 		}
@@ -70,8 +70,8 @@ class Solution {
 			D = readInt();	W = readInt();	K = readInt();
 			film = new int[D][W];
 			A = new int[W];	B = new int[W];
-			Arrays.fill(B, 1);
 			
+			Arrays.fill(B, 1);
 			for (int row = 0; row < D; row++) {
 				for (int col = 0; col < W; col++) film[row][col] = readInt();
 			}
