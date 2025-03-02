@@ -6,17 +6,17 @@ class Solution {
 	static int[][] film;
 	
 	static boolean isValid() {
-		for (int col = 0; col < W; col++) {
+		R: for (int col = 0; col < W; col++) {
 			int cnt = 1;
 			
 			for (int row = 1; row < D; row++) {
 				if (film[row][col] == film[row - 1][col]) {
-					if(++cnt == K) break;
+					if(++cnt == K) continue R;
 				}
 				else cnt = 1;
-
-				if (row == D - 1) return false;
 			}
+			
+			return false;
 		}
 		
 		return true;
@@ -42,7 +42,7 @@ class Solution {
 	}
 	
 	static int performTest() {
-		if(K == 1) return 0;
+		if (K == 1) return 0;
 		
 		for (int i = 0; i < K; i++) {
 			if (comb(0, 0, i)) return i;
