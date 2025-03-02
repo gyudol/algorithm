@@ -1,9 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+class Main {
 	static int N, M;
-	static int[][] city;
 	static List<Axis> homes, stores;
 	
 	static class Axis {
@@ -15,16 +14,16 @@ public class Main {
 		}
 	}
 	
-	static int chickenDist(boolean[] isSelected) {
+	static int chickenDist(int[] isSelected) {
 		int sum = 0;
 		
-		for(Axis home : homes) {
+		for (Axis home : homes) {
 			int min = Integer.MAX_VALUE;
 			
-			for (int i = 0; i < stores.size(); i++) {
-				if (!isSelected[i]) continue;
-				min = Math.min(Math.abs(home.row - stores.get(i).row)
-						+ Math.abs(home.col - stores.get(i).col), min);
+			for (int i : isSelected) {
+				Axis store = stores.get(i);
+				min = Math.min(Math.abs(home.row - store.row)
+						+ Math.abs(home.col - store.col), min);
 			}
 			
 			sum += min;
@@ -33,16 +32,13 @@ public class Main {
 		return sum;
 	}
 	
-	static int dfs(int src, int depth, boolean[] isSelected) {
+	static int dfs(int src, int depth, int[] isSelected) {
+		if (depth == M) return chickenDist(isSelected);
 		int min = Integer.MAX_VALUE;
 		
-		if (depth > M) return min;
-		if(depth > 0) min = chickenDist(isSelected);
-		
 		for (int i = src; i < stores.size(); i++) {
-			isSelected[i] = true;
+			isSelected[depth] = i;
 			min = Math.min(dfs(i + 1, depth + 1, isSelected), min);
-			isSelected[i] = false;
 		}
 		
 		return min;
@@ -61,18 +57,18 @@ public class Main {
 	
 	public static void main(String [] args) throws Exception {
 		N = readInt();	M = readInt();
-		city = new int[N][N];
 		homes = new ArrayList<>();
 		stores = new ArrayList<>();
 		
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) {
-				city[row][col] = readInt();
-				if (city[row][col] == 1) homes.add(new Axis(row, col));
-				else if (city[row][col] == 2) stores.add(new Axis(row, col));
+				int info = readInt();
+				
+				if (info == 1) homes.add(new Axis(row, col));
+				else if (info == 2) stores.add(new Axis(row, col));
 			}
 		}
 		
-		System.out.print(dfs(0, 0, new boolean[stores.size()]));
+		System.out.print(dfs(0, 0, new int[M]));
 	}
 }
