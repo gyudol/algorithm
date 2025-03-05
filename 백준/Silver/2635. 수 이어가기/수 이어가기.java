@@ -25,10 +25,9 @@ class Main {
 			}
 		}
 		
-		result.append(maxCnt).append('\n');
 		int before = N, cur = target;
 		
-		result.append(before).append(' ').append(cur).append(' ');
+		result.append(maxCnt).append('\n').append(before).append(' ').append(cur).append(' ');
 		while (before - cur >= 0) {
 			int tmp = cur;
 			
