@@ -1,12 +1,11 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 class Main {
-	static final int N = 9, CUT = 3;
+	static final int N = 9;
+	static final int CUT = 3;
 	static int[][] board = new int[N][N];
-	static List<Axis> zeroList = new ArrayList<>();
+	static List<Axis> blankList = new ArrayList<>();
 	
 	static class Axis {
 		int row, col;
@@ -18,56 +17,51 @@ class Main {
 	}
 	
 	static boolean isPromising(int curRow, int curCol, int num) {
-		int srcRow = curRow / CUT * CUT, desRow = srcRow + CUT,
-				srcCol = curCol / CUT * CUT, desCol = srcCol + CUT;
+		int srcRow = curRow / CUT * CUT, srcCol = curCol / CUT * CUT;
 		
-		for (int row = 0; row < N; row++) {
-			if (board[row][curCol] == num) return false;
-		}
-		
-		for (int col = 0; col < N; col++) {
-			if (board[curRow][col] == num) return false;
-		}
-		
-		for (int row = srcRow; row < desRow; row++) {
-			for (int col = srcCol; col < desCol; col++) {
-				if (board[row][col] == num) return false;
-			}
+		for (int i = 0; i < N; i++) {
+			if (board[i][curCol] == num) return false;
+			if (board[curRow][i] == num) return false;
+			if (board[srcRow + i / CUT][srcCol + i % CUT] == num) return false;
 		}
 		
 		return true;
 	}
 	
-	static boolean playSudoku(int depth) {
-		if (depth == zeroList.size()) return true;
-		Axis axis = zeroList.get(depth);
+	static boolean sudoku(int depth) {
+		if (depth == blankList.size()) return true;
+		Axis axis = blankList.get(depth);
 		
 		for (int num = 1; num <= N; num++) {
-			if (!isPromising(axis.row, axis.col, num)) continue;
+			if(!isPromising(axis.row, axis.col, num)) continue;
 			
 			board[axis.row][axis.col] = num;
-			if (playSudoku(depth + 1)) return true;
+			if(sudoku(depth + 1)) return true;
 			board[axis.row][axis.col] = 0;
 		}
 		
 		return false;
 	}
 	
+	static int readInt() throws Exception {
+		int c = System.in.read();
+		
+		while (c <= 32) c = System.in.read();
+		return c & 15;
+	}
+	
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder result = new StringBuilder();
 		
 		for (int row = 0; row < N; row++) {
-			String line = br.readLine();
-			
 			for (int col = 0; col < N; col++) {
-				board[row][col] = line.charAt(col) - '0';
-				if (board[row][col] == 0) zeroList.add(new Axis(row, col));
+				board[row][col] = readInt();
+				if (board[row][col] == 0) blankList.add(new Axis(row, col));
 			}
 		}
 		
-		playSudoku(0);
-
+		sudoku(0);
+		
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) result.append(board[row][col]);
 			result.append('\n');
