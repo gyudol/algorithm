@@ -1,75 +1,70 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
-public class Main {
-	private static final int [][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	private static int n;
-	private static int m;
-	private static int [][] tomatoes;
-	private static boolean [][] isVisited;
-	private static Queue<Tomato> ripeTomatoes;
+class Main {
+	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static int N, M;
+	static int[][] tomatoes;
 	
-	private static class Tomato {
-		public int row;
-		public int col;
-		public int day;
+	static class Tomato {
+		int row, col, day;
 		
-		private Tomato(int row, int col, int day) {
+		Tomato(int row, int col, int day) {
 			this.row = row;
 			this.col = col;
 			this.day = day;
 		}
 	}
 	
-	private static int bfs(int raw) {
-		if(raw == 0) return 0;
+	static int bfs(Queue<Tomato> q, int remainder) {
+		if (remainder == 0) return 0;
 		
-		while(!ripeTomatoes.isEmpty()) {
-			Tomato tomato = ripeTomatoes.poll();
-			int nextDay = tomato.day + 1;
+		while (!q.isEmpty()) {
+			Tomato tomato = q.poll();
+			int row = tomato.row, col = tomato.col, day = tomato.day;
 			
-			for(int [] d : DIR) {
-				int nextRow = tomato.row + d[0];
-				int nextCol = tomato.col + d[1];
+			for (int[] d : DIR) {
+				int nr = row + d[0], nc = col + d[1];
 				
-				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m || 
-						tomatoes[nextRow][nextCol] == -1 || isVisited[nextRow][nextCol]) continue;
-
-				if(--raw == 0) return nextDay;
-				isVisited[nextRow][nextCol] = true;
-				ripeTomatoes.offer(new Tomato(nextRow, nextCol, nextDay));
+				if (nr < 0 || nr >= N || nc < 0 || nc >= M
+						|| tomatoes[nr][nc] != 0) continue;
+				if (--remainder == 0) return day + 1;
+				
+				tomatoes[nr][nc] = 1;
+				q.offer(new Tomato(nr, nc, day + 1));
 			}
 		}
 		
 		return -1;
 	}
 	
-	public static void main(String [] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		m = Integer.parseInt(st.nextToken()); n = Integer.parseInt(st.nextToken());
-		int raw = 0;
-		tomatoes = new int [n][m];
-		isVisited = new boolean [n][m];
-		ripeTomatoes = new LinkedList<>();
+	static int readInt() throws Exception {
+		int c, n = 0;
 		
-		for(int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
-			
-			for(int j = 0; j < m; j++) {
-				tomatoes[i][j] = Integer.parseInt(st.nextToken());
-
-				if(tomatoes[i][j] == 1) {
-					isVisited[i][j] = true;
-					ripeTomatoes.offer(new Tomato(i, j, 0));
-				}
-				else if(tomatoes[i][j] == 0) raw++;
+		while ((c = System.in.read()) <= 32);
+		do {
+			n = (n << 3) + (n << 1) + (c & 15);
+		} while ((c = System.in.read()) >= 48);
+	
+		return n;
+	}
+	
+	public static void main(String [] args) throws Exception {
+		M = readInt();
+		N = readInt();
+		tomatoes = new int[N][M];
+		Queue<Tomato> q = new ArrayDeque<>();
+		int remainder = 0;
+		
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < M; col++) {
+				tomatoes[row][col] = readInt();
+				
+				if (tomatoes[row][col] == 0) remainder++;
+				else if (tomatoes[row][col] == 1) q.offer(new Tomato(row, col, 0));
 			}
 		}
 		
-		System.out.print(bfs(raw));
+		System.out.print(bfs(q, remainder));
 	}
 }
