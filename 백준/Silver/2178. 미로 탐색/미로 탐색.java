@@ -1,46 +1,44 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-	private static final int [][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	private static int n;
-	private static int m;
+class Main {
+	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static int N, M;
+	static int[][] maze;
 	
-	private static class State {
-		public int row;
-		public int col;
-		public int depth;
+	static class State {
+		int row, col, dist;
 		
-		private State(int row, int col, int depth) {
+		State(int row, int col, int dist) {
 			this.row = row;
 			this.col = col;
-			this.depth = depth;
+			this.dist = dist;
 		}
 	}
 	
-	private static int bfs(int [][] maze, boolean [][] isVisited) {
-		Queue<State> q = new LinkedList<>();
+	static int bfs() {
+		Queue<State> q = new ArrayDeque<>();
+		boolean[][] isVisited = new boolean[N][M];
+		
 		q.offer(new State(0, 0, 1));
 		isVisited[0][0] = true;
 		
-		while(!q.isEmpty()) {
-			State s = q.poll();
+		while (!q.isEmpty()) {
+			State state = q.poll();
+			int row = state.row, col = state.col, dist = state.dist;
 			
-			if(s.row == n - 1 && s.col == m - 1) return s.depth;
+			if (row == N - 1 && col == M - 1) return dist;
 			
-			for(int [] d : DIR) {
-				int nextRow = s.row + d[0];
-				int nextCol = s.col + d[1];
+			for (int[] d : DIR) {
+				int nr = row + d[0], nc = col + d[1];
 				
-				if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= m
-						|| maze[nextRow][nextCol] == 0 || isVisited[nextRow][nextCol]) continue;
-				
-				isVisited[nextRow][nextCol] = true;
-				q.offer(new State(nextRow, nextCol, s.depth + 1));
+				if (nr < 0 || nr >= N || nc < 0 || nc >= M
+						|| isVisited[nr][nc] || maze[nr][nc] == 0) continue;
+				isVisited[nr][nc] = true;
+				q.offer(new State(nr, nc, dist + 1));
 			}
 		}
 		
@@ -50,13 +48,16 @@ public class Main {
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken()); m = Integer.parseInt(st.nextToken());
-		int [][] maze = new int [n][m];
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		maze = new int[N][M];
 		
-		for(int i = 0; i < n; i++)
-			maze[i] = Arrays.stream(br.readLine().split(""))
-					.mapToInt(Integer::parseInt).toArray();
+		for (int row = 0; row < N; row++) {
+			String line = br.readLine();
+			
+			for (int col = 0; col < M; col++) maze[row][col] = line.charAt(col) - '0';
+		}
 		
-		System.out.print(bfs(maze, new boolean [n][m]));
+		System.out.print(bfs());
 	}
 }
