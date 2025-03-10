@@ -1,55 +1,58 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
-public class Main {
-	private static final int MAX = 100000;
+class Main {
+	static final int MAX = 100_000;
 	
-	private static class State {
-		public final int x;
-		public final int depth;
+	static class State {
+		int x, sec;
 		
-		private State(int x, int depth) {
+		State(int x, int sec) {
 			this.x = x;
-			this.depth = depth;
+			this.sec = sec;
 		}
 	}
 	
-	private static int bfs(int start, int target) {
-		Queue<State> q = new LinkedList<>();
-		boolean [] isVisited = new boolean [MAX + 1];
-		q.offer(new State(start, 0));
-		isVisited[start] = true;
+	static int hideAndSeek(int N, int K) {
+		if (N >= K) return N - K;
 		
-		while(!q.isEmpty()) {
+		Queue<State> q = new ArrayDeque<>();
+		boolean[] isVisited = new boolean[MAX + 1];
+		
+		q.offer(new State(N, 0));
+		isVisited[N] = true;
+		
+		while (!q.isEmpty()) {
 			State state = q.poll();
+			int x = state.x, sec = state.sec;
 			
-			if(state.x == target) return state.depth;
+			if (x == K) return sec;
 			
-			if(state.x > 0 && !isVisited[state.x - 1]) {
-				q.offer(new State(state.x - 1, state.depth + 1));
-				isVisited[state.x - 1] = true;
-			}
-			if(state.x < MAX && !isVisited[state.x + 1]) {
-				q.offer(new State(state.x + 1, state.depth + 1));
-				isVisited[state.x + 1] = true;
-			}
-			if(state.x <= MAX / 2 && !isVisited[state.x * 2]) {
-				q.offer(new State(state.x * 2, state.depth + 1));
-				isVisited[state.x + 1] = true;
+			for (int des : new int[] {x - 1, x + 1, x * 2}) {
+				if (des < 0 || des > MAX || isVisited[des]) continue;
+				isVisited[des] = true;
+				
+				q.offer(new State(des, sec + 1));
 			}
 		}
 		
 		return -1;
 	}
 	
-	public static void main(String [] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int start = Integer.parseInt(st.nextToken()), target = Integer.parseInt(st.nextToken());
+	static int readInt() throws Exception {
+		int c, n = 0;
 		
-		System.out.print(bfs(start, target));
+		while ((c = System.in.read()) <= 32);
+		do {
+			n = (n << 3) + (n << 1) + (c & 15);
+		} while ((c = System.in.read()) >= 48);
+		
+		return n;
+	}
+	
+	public static void main(String [] args) throws Exception {
+		final int N = readInt(), K = readInt();
+		
+		System.out.print(hideAndSeek(N, K));
 	}
 }
