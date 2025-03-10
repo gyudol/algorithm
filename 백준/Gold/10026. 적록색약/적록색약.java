@@ -1,57 +1,48 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Main {
-	private static final int [][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	private static int n;
-	private static char [][] grid;
-	private static boolean [][][] isVisited;
+class Main {
+	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static int N;
+	static char[][] painting;
 	
-	private static boolean promising(char cur, char next) {	// about color blindness
-		if(cur == next) return true;
-		if(cur == 'R' && next == 'G') return true;
-		if(cur == 'G' && next == 'R') return true;
+	static boolean dfs(int row, int col, char base, boolean[][] isVisited) {
+		if (isVisited[row][col]) return false;
+		isVisited[row][col] = true;
 		
-		return false;
-	}
-	
-	private static int dfs(int row, int col, int isColorBlind) {
-		if(isVisited[row][col][isColorBlind]) return 0;
-		isVisited[row][col][isColorBlind] = true;
-		
-		for(int [] d : DIR) {
-			int nextRow = row + d[0];
-			int nextCol = col + d[1];
+		for (int[] d : DIR) {
+			int nr = row + d[0], nc = col + d[1];
 			
-			if(nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n) continue;
-			if(isColorBlind == 0 && grid[row][col] != grid[nextRow][nextCol]) continue;
-			if(isColorBlind == 1 && !promising(grid[row][col], grid[nextRow][nextCol])) continue;
-			
-			dfs(nextRow, nextCol, isColorBlind);
+			if (nr < 0 || nr >= N || nc < 0 || nc >= N || painting[nr][nc] != base) continue;
+			dfs(nr, nc, base, isVisited);
 		}
 		
-		return 1;
+		return true;
+	}
+	
+	static int getAreaCnt(boolean isColorBlind) {
+		boolean[][] isVisited = new boolean[N][N];
+		int areaCnt = 0;
+		
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < N; col++) {
+				if (dfs(row, col, painting[row][col], isVisited)) areaCnt++;
+				if (painting[row][col] == 'G' && !isColorBlind) painting[row][col] = 'R';
+			}
+		}
+		
+		return areaCnt;
 	}
 	
 	public static void main(String [] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder result = new StringBuilder();
-		int [] area = {0, 0};
-		n = Integer.parseInt(br.readLine());
-		grid = new char [n][n];
-		isVisited = new boolean [n][n][2];
+		N = Integer.parseInt(br.readLine());
+		painting = new char[N][N];
 		
-		for(int i = 0; i < n; i++) grid[i] = br.readLine().toCharArray();
+		for (int row = 0; row < N; row++) painting[row] = br.readLine().toCharArray();
 		
-		for(int row = 0; row < n; row++) {
-			for(int col = 0; col < n; col++) {
-				area[0] += dfs(row, col, 0);
-				area[1] += dfs(row, col, 1);
-			}
-		}
-		
-		result.append(area[0]).append(' ').append(area[1]);
-		
+		result.append(getAreaCnt(false)).append(' ').append(getAreaCnt(true));
 		System.out.print(result);
 	}
 }
