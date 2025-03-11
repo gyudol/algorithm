@@ -4,38 +4,35 @@ class Main {
 	static int N, M;
 	static int[][] lab;
 	static int max = 0;
+	static int wallCnt = 0;
 	
-	static boolean dfs(int row, int col, boolean[][] isVisited) {
-		if (isVisited[row][col]) return false;
+	static int dfs(int row, int col, boolean[][] isVisited) {
+		if (isVisited[row][col]) return 0;
 		isVisited[row][col] = true;
+		
+		int cnt = 1;
 		
 		for (int[] d : DIR) {
 			int nr = row + d[0], nc = col + d[1];
 			
 			if (nr < 0 || nr >= N || nc < 0 || nc >= M || lab[nr][nc] == 1) continue;
-			dfs(nr, nc, isVisited);
+			cnt += dfs(nr, nc, isVisited);
 		}
 		
-		return true;
+		return cnt;
 	}
 	
 	static int getSafeArea() {
-		int areaCnt = 0;
+		int virusCnt = 0;
 		boolean[][] isVisited = new boolean[N][M];
 		
 		for (int row = 0; row < N; row++) {		// virus infection
 			for (int col = 0; col < M; col++) {
-				if (lab[row][col] == 2) dfs(row, col, isVisited);
+				if (lab[row][col] == 2) virusCnt += dfs(row, col, isVisited);
 			}
 		}
 		
-		for (int row = 0; row < N; row++) {
-			for (int col = 0; col < M; col++) {
-				if (lab[row][col] == 0 && !isVisited[row][col]) areaCnt++;
-			}
-		}
-		
-		return areaCnt;
+		return N * M - virusCnt - wallCnt - R;
 	}
 	
 	static void comb(int src, int depth) {
@@ -72,7 +69,10 @@ class Main {
 		lab = new int[N][M];
 		
 		for (int row = 0; row < N; row++) {
-			for (int col = 0; col < M; col++) lab[row][col] = readInt();
+			for (int col = 0; col < M; col++) {
+				lab[row][col] = readInt();
+				if (lab[row][col] == 1) wallCnt++;
+			}
 		}
 		
 		comb(0, 0);
