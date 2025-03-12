@@ -2,30 +2,23 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
-	private static final int LEN = 26;
-	private static final int [][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-	private static int r;
-	private static int c;
-	private static char [][] board;
+class Main {
+	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static int R, C;
+	static char[][] board;
 	
-	private static int dfs(int depth, int row, int col, boolean [] isVisited) {
+	static int dfs(int row, int col, int depth, boolean[] isVisited) {
 		int max = depth;
 		
-		for(int [] d : DIR) {
-			int nextRow = row + d[0];
-			int nextCol = col + d[1];
+		for (int[] d : DIR) {
+			int nr = row + d[0], nc = col + d[1];
 			
-			if(nextRow < 0 || nextRow >= r || nextCol < 0 || nextCol >= c) continue;
+			if (nr < 0 || nr >= R || nc < 0 || nc >= C
+					|| isVisited[board[nr][nc]]) continue;
 			
-			int idx = board[nextRow][nextCol] - 'A';
-			
-			if(isVisited[idx]) continue;
-			isVisited[idx] = true;
-			
-			max = Math.max(max, dfs(depth + 1, nextRow, nextCol, isVisited));
-			
-			isVisited[idx] = false;
+			isVisited[board[nr][nc]] = true;
+			max = Math.max(dfs(nr, nc, depth + 1, isVisited), max);
+			isVisited[board[nr][nc]] = false;
 		}
 		
 		return max;
@@ -34,11 +27,15 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		r = Integer.parseInt(st.nextToken()); c = Integer.parseInt(st.nextToken());
-		board = new char [r][c];
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		board = new char[R][C];
 		
-		for(int i = 0; i < r; i++) board[i] = br.readLine().toCharArray();
+		for (int row = 0; row < R; row++) board[row] = br.readLine().toCharArray();
 		
-		System.out.print(dfs(0, 0, -1, new boolean [LEN]));
+		boolean[] isVisited = new boolean['Z' + 1];
+		isVisited[board[0][0]] = true;
+		
+		System.out.print(dfs(0, 0, 1, isVisited));
 	}
 }
