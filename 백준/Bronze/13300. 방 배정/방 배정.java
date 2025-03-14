@@ -18,7 +18,7 @@ class Main {
 		int[][] students = new int[GENDER][GRADE + 1];
 		int roomCnt = 0;
 		
-		for (int i = 0; i < N; i++)	students[readInt()][readInt()]++;
+		for (int i = 0; i < N; i++) students[readInt()][readInt()]++;
 		
 		for (int grade = 1; grade <= GRADE; grade++) {
 			for (int gender = 0; gender < GENDER; gender++) {
