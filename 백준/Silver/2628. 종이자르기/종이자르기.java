@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,23 +8,17 @@ class Main {
 	static List<Integer> rows, cols;
 	
 	static int getMaxArea() {
-		int max = 0, srcRow = 0;
+		int rowOffset = 0, colOffset = 0;
 		
 		Collections.sort(rows);
 		Collections.sort(cols);
 		
-		for (int curRow : rows) {
-			int srcCol = 0;
-			
-			for (int curCol : cols) {
-				max = Math.max((curCol - srcCol) * (curRow - srcRow), max);
-				srcCol = curCol;
-			}
-			
-			srcRow = curRow;
-		}
+		for (int i = 0; i < rows.size() - 1; i++) 
+			rowOffset = Math.max(rows.get(i + 1) - rows.get(i), rowOffset);
+		for (int i = 0; i < cols.size() - 1; i++)
+			colOffset = Math.max(cols.get(i + 1) - cols.get(i), colOffset);
 		
-		return max;
+		return rowOffset * colOffset;
 	}
 	
 	static int readInt() throws Exception {
@@ -50,8 +45,8 @@ class Main {
 			else rows.add(readInt());
 		}
 		
-		cols.add(W);
-		rows.add(H);
+		cols.addAll(Arrays.asList(0, W));
+		rows.addAll(Arrays.asList(0, H));
 		
 		System.out.print(getMaxArea());
 	}
