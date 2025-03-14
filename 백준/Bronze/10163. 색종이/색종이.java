@@ -16,6 +16,7 @@ class Main {
 		final int N = readInt();
 		StringBuilder result = new StringBuilder();
 		int[][] confetti = new int[LENGTH][LENGTH];
+		int[] area = new int[N + 1];
 		
 		for (int num = 1; num <= N; num++) {
 			final int srcCol = readInt(), srcRow = LENGTH - readInt() - 1,
@@ -27,17 +28,11 @@ class Main {
 			}
 		}
 		
-		for (int num = 1; num <= N; num++) {
-			int area = 0;
-			
-			for (int row = 0; row < LENGTH; row++) {
-				for (int col = 0; col < LENGTH; col++) {
-					if (confetti[row][col] == num) area++;
-				}
-			}
-			
-			result.append(area).append('\n');
+		for (int row = 0; row < LENGTH; row++) {
+			for (int col = 0; col < LENGTH; col++) area[confetti[row][col]]++;
 		}
+		
+		for (int num = 1; num <= N; num++) result.append(area[num]).append('\n');
 		
 		System.out.print(result);
 	}
