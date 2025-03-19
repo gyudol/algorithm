@@ -1,46 +1,26 @@
-import java.util.Arrays;
-
 class Main {
+	static final int LENGTH = 1000;
 	static int N;
-	static Square[] squares;
+	static int[] heights;
 	
-	static class Square {
-		int L, H;
-		
-		Square(int L, int H) {
-			this.L = L;
-			this.H = H;
-		}
-	}
-	
-	static int getPivotIdx() {
-		int pivotIdx = 0;
-		
-		for (int idx = 0; idx < N; idx++) {
-			if (squares[pivotIdx].H < squares[idx].H) pivotIdx = idx;
-		}
-		
-		return pivotIdx;
-	}
-	
-	static int getArea(int pivotIdx) {
+	static int getArea(int pivot) {
 		int area = 0;
 		
-		for (int i = 1, baseIdx = 0; i <= pivotIdx; i++) {
-			if (squares[baseIdx].H <= squares[i].H) {
-				area += (squares[i].L - squares[baseIdx].L) * squares[baseIdx].H;
-				baseIdx = i;
+		for (int i = 1, base = 0; i <= pivot; i++) {
+			if (heights[base] <= heights[i]) {
+				area += (i - base) * heights[base];
+				base = i;
 			}
 		}
 		
-		for (int i = N - 2, baseIdx = N - 1; i >= pivotIdx; i--) {
-			if (squares[baseIdx].H <= squares[i].H) {
-				area += (squares[baseIdx].L - squares[i].L) * squares[baseIdx].H;
-				baseIdx = i;
+		for (int i = LENGTH - 1, base = LENGTH; i >= pivot; i--) {
+			if (heights[base] <= heights[i]) {
+				area += (base - i) * heights[base];
+				base = i;
 			}
 		}
 		
-		return area + squares[pivotIdx].H;
+		return area + heights[pivot];
 	}
 	
 	static int readInt() throws Exception {
@@ -56,13 +36,19 @@ class Main {
 	
 	public static void main(String[] args) throws Exception {
 		N = readInt();
-		squares = new Square[N];
+		heights = new int[LENGTH + 1];
+		int maxHeight = 0, pivot = 0;
 		
-		for (int i = 0; i < N; i++)
-			squares[i] = new Square(readInt(), readInt());
+		for (int i = 0; i < N; i++) {
+			int L = readInt(), H = readInt();
+			
+			heights[L] = H;
+			if (heights[L] > maxHeight) {
+				maxHeight = heights[L];
+				pivot = L;
+			}
+		}
 		
-		Arrays.sort(squares, (s1, s2) -> Integer.compare(s1.L, s2.L));
-		
-		System.out.print(getArea(getPivotIdx()));
+		System.out.print(getArea(pivot));
 	}
 }
