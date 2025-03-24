@@ -1,14 +1,11 @@
 class Solution {
-    private static final int MOD = 1234567;
+    final int MAX = 100_000;
+    int[] fib = new int[MAX + 1];
     
     public int solution(int n) {
-        int[] dp = new int[n + 1];
+        if (n <= 1) return n;
+        if (fib[n] != 0) return fib[n];
         
-        for(int i = 1; i <= n; i++) {
-            if(i <= 1) dp[i] = i;
-            else dp[i] = (dp[i - 1] + dp[i - 2]) % MOD;
-        }
-        
-        return dp[n];
+        return fib[n] = (solution(n - 1) + solution(n - 2)) % 1234567;
     }
 }
