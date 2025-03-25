@@ -9,7 +9,7 @@ class Solution {
         for (int i = 0; i < bridge_length; i++) deque.offer(0);
         
         for (int truck : truck_weights) {
-            while ((load -= deque.pollFirst()) + truck > weight) {
+            while ((load -= deque.poll()) + truck > weight) {
                 deque.offer(0);
                 sec++;
             }
