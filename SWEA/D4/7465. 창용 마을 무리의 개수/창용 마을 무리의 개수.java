@@ -1,7 +1,3 @@
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.stream.Collectors;
-
 class Solution {
 	static int[] parent;
 	
@@ -15,10 +11,11 @@ class Solution {
 		return root(a) == root(b);
 	}
 	
-	static void merge(int a, int b) {
-		if (isConnected(a, b)) return;
+	static boolean merge(int a, int b) {
+		if (isConnected(a, b)) return false;
 		
 		parent[root(b)] = root(a);
+		return true;
 	}
 	
 	static int readInt() throws Exception {
@@ -39,15 +36,15 @@ class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			final int N = readInt(), M = readInt();
 			parent = new int[N + 1];
+			int cluster = N;
 			
 			for (int i = 1; i <= N; i++) parent[i] = i;
 			
-			for (int i = 0; i < M; i++) merge(readInt(), readInt());
-			for (int i = 1; i <= N; i++) root(i);
-
-			result.append('#').append(tc).append(' ')
-				.append(new HashSet<>(Arrays.stream(parent).boxed()
-						.collect(Collectors.toList())).size() - 1).append('\n');
+			for (int i = 0; i < M; i++) {
+				if (merge(readInt(), readInt())) cluster--;
+			}
+			
+			result.append('#').append(tc).append(' ').append(cluster).append('\n');
 		}
 		
 		System.out.print(result);
