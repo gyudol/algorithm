@@ -1,4 +1,6 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class Solution {
 	static int V, E;
@@ -33,7 +35,7 @@ class Solution {
 		return true;
 	}
 	
-	static long kruskal(Edge[] edges) {
+	static long kruskal(List<Edge> edges) {
 		int cnt = 0;
 		long dist = 0;
 		
@@ -70,12 +72,12 @@ class Solution {
 			V = readInt();
 			E = readInt();
 			parents = new int[V + 1];
-			Edge[] edges = new Edge[E];
+			List<Edge> edges = new ArrayList<>();
 			
 			for (int i = 1; i <= V; i++) parents[i] = i;
 			for (int i = 0; i < E; i++)
-				edges[i] = new Edge(readInt(), readInt(), readInt());
-			Arrays.sort(edges);
+				edges.add(new Edge(readInt(), readInt(), readInt()));
+			Collections.sort(edges);
 			
 			result.append('#').append(tc).append(' ').append(kruskal(edges)).append('\n');
 		}
