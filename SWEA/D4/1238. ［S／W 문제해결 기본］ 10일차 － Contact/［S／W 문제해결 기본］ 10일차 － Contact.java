@@ -1,13 +1,11 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
 
 class Solution {
 	static final int T = 10;
 	static final int N = 100;
-	static ArrayList<Set<Integer>> edges;
+	static ArrayList<ArrayList<Integer>> edges;
 	
 	static int bfs(int src) {
 		Queue<Integer> q = new ArrayDeque<>();
@@ -53,7 +51,7 @@ class Solution {
 			final int M = readInt(), SOURCE = readInt();
 			edges = new ArrayList<>();
 			
-			for (int i = 0; i <= N; i++) edges.add(new HashSet<>());
+			for (int i = 0; i <= N; i++) edges.add(new ArrayList<>());
 			for (int i = 0; i < M / 2; i++) edges.get(readInt()).add(readInt());
 		
 			result.append('#').append(tc).append(' ').append(bfs(SOURCE)).append('\n');
