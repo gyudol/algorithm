@@ -44,7 +44,7 @@ class Solution {
 	}
 	
 	static long mst(double E) {
-		double length = 0;
+		long length = 0;
 		
 		for (int i = 0; i < edges.size(); i++) {
 			Edge edge = edges.get(i);
@@ -79,10 +79,10 @@ class Solution {
 			
 			for (int u = 0; u < N; u++) {
 				for (int v = u + 1; v < N; v++) {
-					long distX = nodes[v].x - nodes[u].x,
+					int distX = nodes[v].x - nodes[u].x,
 							distY = nodes[v].y - nodes[u].y;
 					
-					edges.add(new Edge(u, v, distX * distX + distY * distY));
+					edges.add(new Edge(u, v, distX * 1L * distX + distY * 1L * distY));
 				}
 			}
 			
