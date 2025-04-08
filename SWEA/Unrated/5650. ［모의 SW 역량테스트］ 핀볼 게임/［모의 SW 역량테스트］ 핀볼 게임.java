@@ -2,8 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Solution {
-	// 우 하 좌 상
-	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // 우 하 좌 상
 	
 	static class Coord {
 		int row, col;
@@ -63,7 +62,6 @@ class Solution {
 		
 		while (true) {
 			int nextRow = row + DIR[d][0], nextCol = col + DIR[d][1];
-//			System.out.println(nextRow + ", " + nextCol + ", " + d);
 			
 			if (nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= N) {
 				row = nextRow;
