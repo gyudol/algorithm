@@ -1,5 +1,5 @@
 class Solution {
-    static final int M = 10;
+	static final int M = 10;
     static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     static final int[][] COLLISIONS = {null, {2, 0, 3, 1},
             {2, 3, 1, 0}, {1, 3, 0, 2}, {3, 2, 0, 1}, {2, 3, 0, 1}};
@@ -16,11 +16,7 @@ class Solution {
             col += DIR[d][1];
             int block;
             
-            if (row < 0 || row >= N || col < 0 || col >= N) {
-            	d = COLLISIONS[5][d];
-            	score++;
-            	continue;
-            }
+            if (row < 0 || row >= N || col < 0 || col >= N) return score * 2 + 1;
             		
             if ((row == srcRow && col == srcCol) || (block = board[row][col]) == -1) break;
             else if (block > 0 && block <= 5) {
