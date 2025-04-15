@@ -7,7 +7,6 @@ class Main {
 	
 	static long power(long x, long y) {
 		long res = 1L;
-		x %= P;
 		
 		while (y > 0) {
 			if (y % 2 == 1) res = res * x % P;
