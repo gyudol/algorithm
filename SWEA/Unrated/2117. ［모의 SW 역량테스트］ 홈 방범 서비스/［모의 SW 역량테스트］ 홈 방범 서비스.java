@@ -1,27 +1,29 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
-	static final int[] COSTS = {1, 5, 13, 25, 41, 61, 85, 113, 145, 181, 221, 265, 
-			313, 365, 421, 481, 545, 613, 685, 761, 841};
-	
 	static int N, M;
-	static boolean[][] city;
+	static List<House> houses;
 	
 	static int getMaxRevenue(int midRow, int midCol) {
 		int max = 0;
+		int[] dist = new int[houses.size()];
 		
-		for (int k = 0; k <= N; k++) {
-			int offset = 0, house = 0;
+		for (int i = 0; i < houses.size(); i++) {
+			House h = houses.get(i);
+			dist[i] = Math.abs(midRow - h.row) + Math.abs(midCol - h.col);
+		}
+		
+		for (int k = 1; k <= N + 1; k++) {
+			int cnt = 0;
 			
-			for (int row = midRow - k; row <= midRow + k; row++) {
-				for (int col = midCol - offset; col <= midCol + offset; col++) {
-					if (row < 0 || row >= N || col < 0 || col >= N || !city[row][col]) continue;
-					house++;
-				}
-				
-				if (row < midRow) offset++;
-				else offset--;
+			for (int d : dist) {
+				if (d < k) cnt++;
 			}
 			
-			if (house * M >= COSTS[k]) max = Math.max(house, max);
+			if (cnt * M >= k * k + (k - 1) * (k - 1)) {
+				max = Math.max(cnt, max);
+			}
 		}
 		
 		return max;
@@ -57,11 +59,13 @@ class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			N = readInt();
 			M = readInt();
-			city = new boolean[N][N];
+			houses = new ArrayList<>();
 			
 			for (int row = 0; row < N; row++) {
 				for (int col = 0; col < N; col++) {
-					city[row][col] = readInt() == 1;
+					if (readInt() == 1) {
+						houses.add(new House(row, col));
+					}
 				}
 			}
 			
@@ -69,5 +73,14 @@ class Solution {
 		}
 		
 		System.out.print(result);
+	}
+	
+	static class House {
+		int row, col;
+		
+		House(int row, int col) {
+			this.row = row;
+			this.col = col;
+		}
 	}
 }
