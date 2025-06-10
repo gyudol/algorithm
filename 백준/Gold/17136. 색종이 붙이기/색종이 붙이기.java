@@ -7,7 +7,6 @@ class Main {
 	
 	static int[] papers;
 	static boolean[][] board;
-	static boolean[][] isVisited;
 	static List<Mark> marks;
 	static int min;
 	
@@ -16,7 +15,7 @@ class Main {
 		
 		for (int row = srcRow; row < srcRow + offset; row++) {
 			for (int col = srcCol; col < srcCol + offset; col++) {
-				if (!board[row][col] || isVisited[row][col]) return false;
+				if (!board[row][col]) return false;
 			}
 		}
 		
@@ -26,7 +25,7 @@ class Main {
 	static void markVisited(int srcRow, int srcCol, int offset, boolean visitState) {
 		for (int row = srcRow; row < srcRow + offset; row++) {
 			for (int col = srcCol; col < srcCol + offset; col++) {
-				isVisited[row][col] = visitState;
+				board[row][col] = !visitState;
 			}
 		}
 		
@@ -39,18 +38,19 @@ class Main {
 		if (cnt >= min) return;
 		
 		Mark mark = marks.get(idx);
+		int row = mark.row, col = mark.col;
 		
-		if (isVisited[mark.row][mark.col]) {
+		if (!board[row][col]) {
 			backtracking(idx + 1, cnt);
 			return;
 		}
 		
 		for (int size = M; size > 0; size--) {
-			if (papers[size] == 0 || !isValid(mark.row, mark.col, size)) continue;
+			if (papers[size] == 0 || !isValid(row, col, size)) continue;
 			
-			markVisited(mark.row, mark.col, size, true);
+			markVisited(row, col, size, true);
 			backtracking(idx + 1, cnt + 1);
-			markVisited(mark.row, mark.col, size, false);
+			markVisited(row, col, size, false);
 		}
 	}
 	
@@ -75,7 +75,6 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		papers = new int[] {0, M, M, M, M, M};
 		board = new boolean[N][N];
-		isVisited = new boolean[N][N];
 		marks = new ArrayList<>();
 		
 		for (int row = 0; row < N; row++) {
