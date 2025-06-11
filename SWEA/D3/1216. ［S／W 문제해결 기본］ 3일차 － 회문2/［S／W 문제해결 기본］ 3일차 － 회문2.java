@@ -4,33 +4,41 @@ import java.io.InputStreamReader;
 class Solution {
 	static final int T = 10;
 	static final int N = 100;
+	static final int MIN_PALINDROME_LENGTH = 1;
 	
 	static char[][] board = new char[N][N];
 	
-	static boolean isPalindrome(StringBuilder str) {
-		return str.toString().equals(str.reverse().toString());
+	static boolean isPalindromeRow(int len, int i, int src) {
+		int des = src + len - 1;
+		
+		for (int j = 0; j < len / 2; j++) {
+			if (board[i][src + j] != board[i][des - j]) return false;
+		}
+		
+		return true;
+	}
+	
+	static boolean isPalindromeCol(int len, int i, int src) {
+		int des = src + len - 1;
+		
+		for (int j = 0; j < len / 2; j++) {
+			if (board[src + j][i] != board[des - j][i]) return false;
+		}
+		
+		return true;
 	}
 	
 	static int getMaxLengthOfPalindrome() {
-		int max = 1;
-
-		for (int len = N; len > max; len--) {
+		for (int len = N; len > MIN_PALINDROME_LENGTH; len--) {
 			for (int i = 0; i < N; i++) {
-				for (int j = 0; j <= N - len; j++) {
-					StringBuilder rowStr = new StringBuilder(),
-							colStr = new StringBuilder();
-					
-					for (int k = j; k < j + len; k++) {
-						rowStr.append(board[i][k]);
-						colStr.append(board[k][i]);
-					}
-					
-					if (isPalindrome(rowStr) || isPalindrome(colStr)) return len;
+				for (int src = 0; src <= N - len; src++) {
+					if (isPalindromeRow(len, i, src)
+							|| isPalindromeCol(len, i, src)) return len;
 				}
 			}
 		}
 		
-		return max;
+		return MIN_PALINDROME_LENGTH;
 	}
 	
 	public static void main(String[] args) throws Exception {
