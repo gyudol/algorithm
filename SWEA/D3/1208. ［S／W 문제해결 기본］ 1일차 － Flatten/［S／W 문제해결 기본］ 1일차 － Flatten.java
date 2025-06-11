@@ -5,34 +5,18 @@ class Solution {
 	static int N;
 	static int[] boxes;
 	
-	static int getHeightDiffByFlatten() {
+	static int getHeightDiffByFlattening() {
 		for (int i = 0; i < N; i++) {
-			int max = 0, min = 101, maxIdx = -1, minIdx = -1;
+			BoxInfo boxInfo = new BoxInfo(boxes);
 			
-			for (int j = 0; j < W; j++) {
-				if (boxes[j] > max) {
-					max = boxes[j];
-					maxIdx = j;
-				}
-				if (boxes[j] < min) {
-					min = boxes[j];
-					minIdx = j;
-				}
-			}
+			if (boxInfo.max - boxInfo.min <= 1) return boxInfo.max - boxInfo.min;
 			
-			if (max - min <= 1) return max - min;
-			boxes[maxIdx]--;
-			boxes[minIdx]++;
+			boxes[boxInfo.maxIdx]--;
+			boxes[boxInfo.minIdx]++;
 		}
 		
-		int max = 0, min = 101;
-		
-		for (int box : boxes) {
-			max = Math.max(box, max);
-			min = Math.min(box, min);
-		}
-		
-		return max - min;
+		BoxInfo boxInfo = new BoxInfo(boxes);
+		return boxInfo.max - boxInfo.min;
 	}
 	
 	static int readInt() throws Exception {
@@ -58,9 +42,26 @@ class Solution {
 			}
 			
 			result.append('#').append(tc).append(' ')
-				.append(getHeightDiffByFlatten()).append('\n');
+				.append(getHeightDiffByFlattening()).append('\n');
 		}
 		
 		System.out.print(result);
+	}
+	
+	static class BoxInfo {
+		int max = 0, min = 101, maxIdx = -1, minIdx = -1;
+		
+		BoxInfo(int[] boxes) {
+			for (int i = 0; i < boxes.length; i++) {
+				if (boxes[i] > max) {
+					max = boxes[i];
+					maxIdx = i;
+				}
+				if (boxes[i] < min) {
+					min = boxes[i];
+					minIdx = i;
+				}
+			}
+		}
 	}
 }
