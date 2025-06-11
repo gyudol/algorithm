@@ -6,37 +6,22 @@ class Solution {
 	
 	static int getMaxSumOfLines() {
 		int max = Integer.MIN_VALUE;
+		int leftDownDiagSum = 0, rightDownDiagSum = 0;
 		
-		for (int row = 0; row < N; row++) {
-			int sum = 0;
+		for (int i = 0; i < N; i++) {
+			int rowSum = 0, colSum = 0;
 			
-			for (int col = 0; col < N; col++) {
-				sum += board[row][col];
+			for (int j = 0; j < N; j++) {
+				rowSum += board[i][j];
+				colSum += board[j][i];
 			}
 			
-			max = Math.max(sum, max);
+			max = Math.max(Math.max(rowSum, colSum), max);
+			rightDownDiagSum += board[i][i];
+			leftDownDiagSum += board[i][N - i - 1];
 		}
 		
-		for (int col = 0; col < N; col++) {
-			int sum = 0;
-			
-			for (int row = 0; row < N; row++) {
-				sum += board[row][col];
-			}
-
-			max = Math.max(sum, max);
-		}
-
-		int rightDownDiagSum = 0, leftDownDiagSum = 0;
-		
-		for (int row = 0; row < N; row++) {
-			for (int col = 0; col < N; col++) {
-				if (row == col) rightDownDiagSum += board[row][col];
-				if (row + col == N) leftDownDiagSum += board[row][col];
-			}
-		}
-		
-		return Math.max(Math.max(rightDownDiagSum, leftDownDiagSum), max);
+		return Math.max(Math.max(leftDownDiagSum, rightDownDiagSum), max);
 	}
 	
 	static int readInt() throws Exception {
