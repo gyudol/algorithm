@@ -8,17 +8,14 @@ class Solution {
 		int cnt = 0;
 		
 		for (int col = 0; col < N; col++) {
+			boolean hasPassedNPole = false;
+			
 			for (int row = 0; row < N; row++) {
 				if (board[row][col] == 1) {
-					int nr = row + 1;
-					
-					while (nr < N && board[nr][col] != 2) nr++;
-					if (nr >= N) break;
-					
-					while (nr < N && board[nr][col] != 1) nr++;
-					
+					hasPassedNPole = true;
+				} else if (hasPassedNPole && board[row][col] == 2) {
 					cnt++;
-					row = nr - 1;
+					hasPassedNPole = false;
 				}
 			}
 		}
