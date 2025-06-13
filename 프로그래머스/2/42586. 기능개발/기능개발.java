@@ -6,21 +6,19 @@ class Solution {
     
     public int[] solution(int[] progresses, int[] speeds) {
         List<Integer> deployments = new ArrayList<>();
-        int prevTerm = 0, prevIdx = 0;
+        int prevTerm = 0, cnt = 0;
         
-        for (int i = 0; i < progresses.length; i++) {
-            int curTerm = (MAX_PROGRESS - progresses[i]) % speeds[i] > 0 ?
-                (MAX_PROGRESS - progresses[i]) / speeds[i] + 1 :
-                (MAX_PROGRESS - progresses[i]) / speeds[i];
+        for (int i = 0; i < progresses.length; i++, cnt++) {
+            int curTerm = (int) Math.ceil((MAX_PROGRESS - progresses[i]) * 1.0 / speeds[i]);
             
             if (curTerm > prevTerm) {
-                deployments.add(i - prevIdx);
-                prevIdx = i;
+                deployments.add(cnt);
                 prevTerm = curTerm;
+                cnt = 0;
             }
         }
         
-        deployments.add(progresses.length - prevIdx);
+        deployments.add(cnt);
         
         return deployments.subList(1, deployments.size())
             .stream().mapToInt(Integer::intValue).toArray();
