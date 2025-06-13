@@ -1,58 +1,48 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 class Solution {
-	static class Node {
-		int x, y;
+	static int N;
+	static Node[] nodes;
+	
+	static double getDistance(int u, int v) {
+		int xDiff = nodes[u].x - nodes[v].x,
+				yDiff = nodes[u].y - nodes[v].y;
+		
+		return Math.sqrt(xDiff * 1L * xDiff + yDiff * 1L * yDiff);
 	}
 	
-	static class Edge implements Comparable<Edge> {
-		int u, v;
-		long squaredW;
+	static double prim() {
+		PriorityQueue<Edge> pq = new PriorityQueue<>();
+		boolean[] isVisited = new boolean[N];
+		double minCost = 0;
+		int cnt = 1;
 		
-		Edge(int u, int v, long squaredW) {
-			this.u = u;
-			this.v = v;
-			this.squaredW = squaredW;
+		isVisited[0] = true;
+		for (int v = 1; v < N; v++) {
+			pq.offer(new Edge(v, getDistance(0, v)));
 		}
 		
-		@Override
-		public int compareTo(Edge other) {
-			return Long.compare(squaredW, other.squaredW);
-		}
-	}
-	
-	static int[] parents;
-	static List<Edge> edges;
-	
-	static int root(int u) {
-		if (parents[u] == u) return u;
-		return parents[u] = root(parents[u]);
-	}
-	
-	static boolean merge(int u, int v) {
-		int rootU = root(u), rootV = root(v);
-		
-		if (rootU == rootV) return false;
-		
-		parents[rootV] = rootU;
-		return true;
-	}
-	
-	static long mst(double E) {
-		long length = 0;
-		
-		for (int i = 0; i < edges.size(); i++) {
-			Edge edge = edges.get(i);
+		while (cnt < N) {
+			Edge edge = pq.poll();
+			int u = edge.v;
+			double cost = edge.cost;
 			
-			if (merge(edge.u, edge.v)) length += edge.squaredW;
+			if (isVisited[u]) continue;
+			isVisited[u] = true;
+			minCost += cost * cost;
+			cnt++;
+			
+			for (int v = 1; v < N; v++) {
+				if (isVisited[v]) continue;
+				
+				pq.offer(new Edge(v, getDistance(u, v)));
+			}
 		}
 		
-		return Math.round(E * length);
+		return minCost;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -61,36 +51,47 @@ class Solution {
 		final int T = Integer.parseInt(br.readLine());
 		
 		for (int tc = 1; tc <= T; tc++) {
-			final int N = Integer.parseInt(br.readLine());
-			Node[] nodes = new Node[N];
-			edges = new ArrayList<>();
-			parents = new int[N];
+			N = Integer.parseInt(br.readLine());
+			nodes = new Node[N];
 			
 			for (int i = 0; i < N; i++) {
-				parents[i] = i;
 				nodes[i] = new Node();
 			}
-			
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < N; i++) nodes[i].x = Integer.parseInt(st.nextToken());
 			
-			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < N; i++) nodes[i].y = Integer.parseInt(st.nextToken());
-			
-			for (int u = 0; u < N; u++) {
-				for (int v = u + 1; v < N; v++) {
-					int distX = nodes[v].x - nodes[u].x,
-							distY = nodes[v].y - nodes[u].y;
-					
-					edges.add(new Edge(u, v, distX * 1L * distX + distY * 1L * distY));
-				}
+			for (int i = 0; i < N; i++) {
+				nodes[i].x = Integer.parseInt(st.nextToken());
 			}
 			
-			Collections.sort(edges);
+			st = new StringTokenizer(br.readLine());
+			
+			for (int i = 0; i < N; i++) {
+				nodes[i].y = Integer.parseInt(st.nextToken());
+			}
+			
 			result.append('#').append(tc).append(' ')
-				.append(mst(Double.parseDouble(br.readLine()))).append('\n');
+				.append(Math.round(Double.parseDouble(br.readLine()) * prim())).append('\n');
 		}
 		
 		System.out.print(result);
+	}
+	
+	static class Node {
+		int x, y;
+	}
+	
+	static class Edge implements Comparable<Edge> {
+		int v;
+		double cost;
+		
+		Edge(int v, double cost) {
+			this.v = v;
+			this.cost = cost;
+		}
+		
+		@Override
+		public int compareTo(Edge other) {
+			return Double.compare(cost, other.cost);
+		}
 	}
 }
