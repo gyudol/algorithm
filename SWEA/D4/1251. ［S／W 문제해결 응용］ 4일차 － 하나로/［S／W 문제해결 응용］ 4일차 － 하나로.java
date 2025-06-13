@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -7,42 +8,50 @@ class Solution {
 	static int N;
 	static Node[] nodes;
 	
-	static double getDistance(int u, int v) {
+	static double getSquaredDistance(int u, int v) {
 		int xDiff = nodes[u].x - nodes[v].x,
 				yDiff = nodes[u].y - nodes[v].y;
 		
-		return Math.sqrt(xDiff * 1L * xDiff + yDiff * 1L * yDiff);
+		return xDiff * 1L * xDiff + yDiff * 1L * yDiff;
 	}
 	
 	static double prim() {
 		PriorityQueue<Edge> pq = new PriorityQueue<>();
 		boolean[] isVisited = new boolean[N];
-		double minCost = 0;
+		double[] dist = new double[N];
+		double costSum = 0;
 		int cnt = 1;
 		
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[0] = 0;
 		isVisited[0] = true;
+		
 		for (int v = 1; v < N; v++) {
-			pq.offer(new Edge(v, getDistance(0, v)));
+			pq.offer(new Edge(v, getSquaredDistance(0, v)));
 		}
 		
 		while (cnt < N) {
 			Edge edge = pq.poll();
 			int u = edge.v;
-			double cost = edge.cost;
+			double cost = edge.squaredDist;
 			
 			if (isVisited[u]) continue;
+			
 			isVisited[u] = true;
-			minCost += cost * cost;
+			costSum += cost;
 			cnt++;
 			
 			for (int v = 1; v < N; v++) {
-				if (isVisited[v]) continue;
+				double squaredDist = getSquaredDistance(u, v);
 				
-				pq.offer(new Edge(v, getDistance(u, v)));
+				if (isVisited[v] || dist[v] <= squaredDist) continue;
+				
+				dist[v] = squaredDist;
+				pq.offer(new Edge(v, squaredDist));
 			}
 		}
 		
-		return minCost;
+		return costSum;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -82,16 +91,16 @@ class Solution {
 	
 	static class Edge implements Comparable<Edge> {
 		int v;
-		double cost;
+		double squaredDist;
 		
-		Edge(int v, double cost) {
+		Edge(int v, double squaredDist) {
 			this.v = v;
-			this.cost = cost;
+			this.squaredDist = squaredDist;
 		}
 		
 		@Override
 		public int compareTo(Edge other) {
-			return Double.compare(cost, other.cost);
+			return Double.compare(squaredDist, other.squaredDist);
 		}
 	}
 }
