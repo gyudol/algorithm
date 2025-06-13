@@ -1,24 +1,25 @@
-import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 class Solution {
     public int[] solution(int[] prices) {
-        Stack<Integer> idxStack = new Stack<>();
-        int[] answer = new int[prices.length];
+        Deque<Integer> indexStack = new ArrayDeque<>();
+        int[] terms = new int[prices.length];
         
         for (int i = 0; i < prices.length; i++) {
-            while (!idxStack.isEmpty() && prices[idxStack.peek()] > prices[i]) {
-                int prevIdx = idxStack.pop();
-                answer[prevIdx] = i - prevIdx;
+            while (!indexStack.isEmpty() && prices[indexStack.peek()] > prices[i]) {
+                int prevIdx = indexStack.pop();
+                terms[prevIdx] = i - prevIdx;
             }
             
-            idxStack.push(i);
+            indexStack.push(i);
         }
         
-        while (!idxStack.isEmpty()) {
-            int prevIdx = idxStack.pop();
-            answer[prevIdx] = prices.length - 1 - prevIdx;
+        while (!indexStack.isEmpty()) {
+            int prevIdx = indexStack.pop();
+            terms[prevIdx] = prices.length - 1 - prevIdx;
         }
         
-        return answer;
+        return terms;
     }
 }
