@@ -1,28 +1,42 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 class Solution {
 	static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	
 	static int N;
 	static int[][] roads;
-	static int[][] isVisited;
-	static int min;
 	
-	static void dfs(int row, int col, int cost) {
-		if (row == N - 1 && col == N - 1) min = Math.min(cost, min);
-		if (cost >= min) return;
+	static int dijkstra() {
+		int[][] minDist = new int[N][N];
+		PriorityQueue<State> pq = new PriorityQueue<>(
+				(s1, s2) -> Integer.compare(s1.dist, s2.dist));
 		
-		for (int[] d : DIRECTIONS) {
-			int nr = row + d[0], nc = col + d[1];
-			
-			if (nr < 0 || nr >= N || nc < 0 || nc >= N 
-					|| isVisited[nr][nc] <= cost + roads[nr][nc]) continue;
-			
-			isVisited[nr][nc] = cost + roads[nr][nc];
-			dfs(nr, nc, cost + roads[nr][nc]);
+		pq.offer(new State(0, 0, 0));
+		for (int row = 0; row < N; row++) {
+			Arrays.fill(minDist[row], Integer.MAX_VALUE);
 		}
+		
+		while (!pq.isEmpty()) {
+			State state = pq.poll();
+			int row = state.row, col = state.col, dist = state.dist;
+			
+			if (row == N - 1 && col == N - 1) return dist;
+			
+			for (int[] d : DIRECTIONS) {
+				int nr = row + d[0], nc = col + d[1];
+				
+				if (nr < 0 || nr >= N || nc < 0 || nc >= N 
+						|| minDist[nr][nc] <= dist + roads[nr][nc]) continue;
+				
+				minDist[nr][nc] = dist + roads[nr][nc];
+				pq.offer(new State(nr, nc, minDist[nr][nc]));
+			}
+		}
+		
+		return -1;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -33,24 +47,28 @@ class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			roads = new int[N][N];
-			isVisited = new int[N][N];
-			min = Integer.MAX_VALUE;
 			
 			for (int row = 0; row < N; row++) {
 				int col = 0;
 				
-				Arrays.fill(isVisited[row], Integer.MAX_VALUE);
 				for (char c : br.readLine().toCharArray()) {
 					roads[row][col++] = c - '0';
 				}
 			}
 			
-			isVisited[0][0] = 0;
-			dfs(0, 0, 0);
-			
-			result.append('#').append(tc).append(' ').append(min).append('\n');
+			result.append('#').append(tc).append(' ').append(dijkstra()).append('\n');
 		}
 		
 		System.out.print(result);
+	}
+	
+	static class State {
+		int row, col, dist;
+		
+		State(int row, int col, int dist) {
+			this.row = row;
+			this.col = col;
+			this.dist = dist;
+		}
 	}
 }
