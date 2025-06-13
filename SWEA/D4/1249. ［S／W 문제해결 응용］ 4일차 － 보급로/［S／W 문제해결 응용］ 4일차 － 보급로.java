@@ -11,8 +11,7 @@ class Solution {
 	
 	static int dijkstra() {
 		int[][] minDist = new int[N][N];
-		PriorityQueue<State> pq = new PriorityQueue<>(
-				(s1, s2) -> Integer.compare(s1.dist, s2.dist));
+		PriorityQueue<State> pq = new PriorityQueue<>();
 		
 		pq.offer(new State(0, 0, 0));
 		for (int row = 0; row < N; row++) {
@@ -62,13 +61,18 @@ class Solution {
 		System.out.print(result);
 	}
 	
-	static class State {
+	static class State implements Comparable<State> {
 		int row, col, dist;
 		
 		State(int row, int col, int dist) {
 			this.row = row;
 			this.col = col;
 			this.dist = dist;
+		}
+		
+		@Override
+		public int compareTo(State other) {
+			return Integer.compare(dist, other.dist);
 		}
 	}
 }
