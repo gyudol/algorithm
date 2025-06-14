@@ -9,19 +9,27 @@ class Solution {
 	static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	
 	static int R, C;
+	static Queue<State> q;
 	static char[][] codes;
 	static boolean[][][][] isVisited;
 	
+	static void command(int row, int col, int newMem, int newDir) {
+		int nr = (row + DIRECTIONS[newDir][0] + R) % R,
+				nc = (col + DIRECTIONS[newDir][1] + C) % C;
+		
+		if (isVisited[nr][nc][newMem][newDir]) return;
+		
+		isVisited[nr][nc][newMem][newDir] = true;
+		q.offer(new State(nr, nc, newMem, newDir));
+	}
+	
 	// DFS는 재귀 호출 깊이 제한으로 Stack Overflow 발생.
 	static boolean bfs() {
-		Queue<State> q = new ArrayDeque<>();
-		
 		q.offer(new State(0, 0, 0, 0));
 		isVisited[0][0][0][0] = true;
 		
 		while (!q.isEmpty()) {
 			State state = q.poll();
-			
 			int row = state.row, col = state.col, mem = state.mem,
 					dir = state.dir, newMem = mem, newDir = dir;
 			char code = codes[row][col];
@@ -42,22 +50,10 @@ class Solution {
 			
 			if (code == '?') {
 				for (int d = 0; d < DIRECTIONS.length; d++) {
-					int nr = (row + DIRECTIONS[d][0] + R) % R,
-							nc = (col + DIRECTIONS[d][1] + C) % C;
-					
-					if (isVisited[nr][nc][newMem][d]) continue;
-					
-					isVisited[nr][nc][newMem][d] = true;
-					q.offer(new State(nr, nc, newMem, d));
+					command(row, col, newMem, d);
 				}	
 			} else {
-				int nr = (row + DIRECTIONS[newDir][0] + R) % R,
-						nc = (col + DIRECTIONS[newDir][1] + C) % C;
-				
-				if (isVisited[nr][nc][newMem][newDir]) continue;
-				
-				isVisited[nr][nc][newMem][newDir] = true;
-				q.offer(new State(nr, nc, newMem, newDir));
+				command(row, col, newMem, newDir);
 			}
 		}
 		
@@ -73,6 +69,8 @@ class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			R = Integer.parseInt(st.nextToken());
 			C = Integer.parseInt(st.nextToken());
+			
+			q = new ArrayDeque<>();
 			codes = new char[R][C];
 			isVisited = new boolean[R][C][MAX_MEMORY + 1][DIRECTIONS.length];			
 
