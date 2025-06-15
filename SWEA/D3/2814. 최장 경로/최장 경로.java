@@ -20,12 +20,12 @@ class Solution {
 	
 	static int getMaxDistance() {
 		int max = 0;
+		boolean[] isVisited = new boolean[N + 1];
 		
 		for (int u = 1; u <= N; u++) {
-			boolean[] isVisited = new boolean[N + 1];
-			
 			isVisited[u] = true;
 			max = Math.max(dfs(u, 1, isVisited), max);
+			isVisited[u] = false;
 		}
 		
 		return max;
