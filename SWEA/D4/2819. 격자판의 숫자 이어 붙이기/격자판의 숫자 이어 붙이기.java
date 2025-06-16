@@ -7,10 +7,10 @@ class Solution {
 	static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	
 	static int[][] board = new int[N][N];
-	static Set<String> digits; 
+	static Set<Integer> digits;
 	
-	static void dfs(int row, int col, String digit) {
-		if (digit.length() == TARGET_DEPTH) {
+	static void dfs(int row, int col, int depth, int digit) {
+		if (depth == TARGET_DEPTH) {
 			digits.add(digit);
 			return;
 		}
@@ -20,16 +20,16 @@ class Solution {
 			
 			if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
 			
-			dfs(nr, nc, digit + board[nr][nc]);
+			dfs(nr, nc, depth + 1, digit * 10 + board[nr][nc]);
 		}
 	}
 	
-	static int getCount() {
+	static int countUniqueDigits() {
 		digits = new HashSet<>();
 		
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) {
-				dfs(row, col, "");
+				dfs(row, col, 0, 0);
 			}
 		}
 		
@@ -59,7 +59,7 @@ class Solution {
 			}
 			
 			result.append('#').append(tc).append(' ')
-				.append(getCount()).append('\n');
+				.append(countUniqueDigits()).append('\n');
 		}
 		
 		System.out.print(result);
