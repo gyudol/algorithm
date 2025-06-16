@@ -1,53 +1,39 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.PriorityQueue;
 
 class Solution {
 	static int V, E;
-	static int[] parents;
+	static ArrayList<ArrayList<Node>> edges;
 	
-	static class Edge implements Comparable<Edge> {
-		int u, v, weight;
+	static long prim() {
+		PriorityQueue<Node> heap = new PriorityQueue<>();
+		boolean[] isVisited = new boolean[V + 1];
+		long costSum = 0;
 		
-		Edge(int u, int v, int weight) {
-			this.u = u;
-			this.v = v;
-			this.weight = weight;
+		isVisited[1] = true;
+		for (Node src : edges.get(1)) {
+			heap.offer(new Node(src.v,  src.dist));
 		}
 		
-		@Override
-		public int compareTo(Edge o) {
-			return Integer.compare(weight, o.weight);
-		}
-	}
-	
-	static int root(int u) {
-		if (parents[u] == u) return u;
-		return parents[u] = root(parents[u]);
-	}
-	
-	static boolean merge(int u, int v) {
-		int rootU = root(u), rootV = root(v);
-		
-		if (rootU == rootV) return false;
-		parents[rootV] = rootU;
-		
-		return true;
-	}
-	
-	static long kruskal(List<Edge> edges) {
-		int cnt = 0;
-		long dist = 0;
-		
-		for (Edge edge : edges) {
-			if (merge(edge.u, edge.v)) {
-				dist += edge.weight;
+		while (!heap.isEmpty()) {
+			Node node = heap.poll();
+			int u = node.v, dist = node.dist;
+			
+			if (isVisited[u]) continue;
+			
+			isVisited[u] = true;
+			costSum += dist;
+			
+			for (Node des : edges.get(u)) {
+				int v = des.v;
 				
-				if (++cnt == V - 1) break;
+				if (isVisited[v]) continue;
+				
+				heap.offer(new Node(v, des.dist));
 			}
 		}
 		
-		return dist;
+		return costSum;
 	}
 	
 	static int readInt() throws Exception {
@@ -71,17 +57,37 @@ class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			V = readInt();
 			E = readInt();
-			parents = new int[V + 1];
-			List<Edge> edges = new ArrayList<>();
+			edges = new ArrayList<>();
 			
-			for (int i = 1; i <= V; i++) parents[i] = i;
-			for (int i = 0; i < E; i++)
-				edges.add(new Edge(readInt(), readInt(), readInt()));
-			Collections.sort(edges);
+			for (int i = 0; i <= V; i++) {
+				edges.add(new ArrayList<>());
+			}
 			
-			result.append('#').append(tc).append(' ').append(kruskal(edges)).append('\n');
+			for (int i = 0; i < E; i++) {
+				int u = readInt(), v = readInt(), dist = readInt();
+				
+				edges.get(u).add(new Node(v, dist));
+				edges.get(v).add(new Node(u, dist));
+			}
+			
+			result.append('#').append(tc).append(' ')
+				.append(prim()).append('\n');
 		}
 		
 		System.out.print(result);
+	}
+	
+	static class Node implements Comparable<Node> {
+		int v, dist;
+		
+		Node(int v, int dist) {
+			this.v = v;
+			this.dist = dist;
+		}
+		
+		@Override
+		public int compareTo(Node other) {
+			return Integer.compare(dist, other.dist);
+		}
 	}
 }
