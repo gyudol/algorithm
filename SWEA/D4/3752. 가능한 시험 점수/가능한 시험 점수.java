@@ -1,24 +1,22 @@
-import java.util.HashSet;
-import java.util.Set;
-
 class Solution {
-	static void generate(int src, Set<Integer> scoreSet) {
-		Set<Integer> tmpSet = new HashSet<>(scoreSet);
+	static int countTotalScores(int total, int[] scores) {
+		boolean[] isSelected = new boolean[total + 1];
+		isSelected[0] = true;
 		
-		for (int score : tmpSet) {
-			scoreSet.add(src + score);
-		}
-	}
-	
-	static int countTotalScores(int[] scores) {
-		Set<Integer> scoreSet = new HashSet<>();
-		
-		scoreSet.add(0);
-		for (int src : scores) {
-			generate(src, scoreSet);
+		for (int score : scores) {
+			// 점수 조합의 중복 적용을 막기 위해 역순으로 순회
+			for (int i = total - 1; i >= 0; i--) {
+				if (isSelected[i]) isSelected[score + i] = true;
+			}
 		}
 		
-		return scoreSet.size();
+		int cnt = 0;
+		
+		for (boolean possible : isSelected) {
+			if (possible) cnt++;
+		}
+		
+		return cnt;
 	}
 	
 	static int readInt() throws Exception {
@@ -38,14 +36,15 @@ class Solution {
          
         for (int tc = 1; tc <= T; tc++) {
             final int N = readInt();
+            int total = 0;
             int[] scores = new int[N];
             
             for (int i = 0; i < N; i++) {
-            	scores[i] = readInt();
+            	total += scores[i] = readInt();
             }
             
             result.append('#').append(tc).append(' ')
-            	.append(countTotalScores(scores)).append('\n');
+            	.append(countTotalScores(total, scores)).append('\n');
         }
         
         System.out.print(result);
