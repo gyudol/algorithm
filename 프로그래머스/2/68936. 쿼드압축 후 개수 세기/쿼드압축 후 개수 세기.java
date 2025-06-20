@@ -1,45 +1,38 @@
 class Solution {
-    Square compress(int[][] arr, int srcRow, int srcCol, int offset) {
+    Count compress(int[][] arr, int srcRow, int srcCol, int offset) {
         int s = arr[srcRow][srcCol];
         
         for (int row = srcRow; row < srcRow + offset; row++) {
             for (int col = srcCol; col < srcCol + offset; col++) {
                 if (arr[row][col] != s) {
                     int half = offset / 2;
-                    Square square = new Square();
                     
-                    for (int r = srcRow; r < srcRow + offset; r += half) {
-                        for (int c = srcCol; c < srcCol + offset; c += half) {
-                            square.add(compress(arr, r, c, half));
-                        }
-                    }
-                        
-                    return square;
+                    return compress(arr, srcRow, srcCol, half)
+                        .add(compress(arr, srcRow, srcCol + half, half))
+                        .add(compress(arr, srcRow + half, srcCol, half))
+                        .add(compress(arr, srcRow + half, srcCol + half, half));
                 }
             }
         }
         
-        return new Square(s);
+        return s == 0 ? new Count(1, 0) : new Count(0, 1);
     }
     
     public int[] solution(int[][] arr) {
-        Square square = compress(arr, 0, 0, arr.length);
-        return new int[] {square.zeroCnt, square.oneCnt};
+        Count count = compress(arr, 0, 0, arr.length);
+        return new int[] {count.zero, count.one};
     }
     
-    class Square {
-        int zeroCnt, oneCnt;
+    class Count {
+        int zero, one;
         
-        Square() {}
-        
-        Square(int num) {
-            if (num == 0) this.zeroCnt = 1;
-            else this.oneCnt = 1;
+        Count(int zero, int one) {
+            this.zero = zero;
+            this.one = one;
         }
         
-        void add(Square other) {
-            this.zeroCnt += other.zeroCnt;
-            this.oneCnt += other.oneCnt;
+        Count add(Count other) {
+            return new Count(zero + other.zero, one + other.one);
         }
     }
 }
