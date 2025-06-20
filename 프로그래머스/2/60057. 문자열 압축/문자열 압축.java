@@ -1,5 +1,5 @@
 class Solution {
-    static int compress(String s, int len) {
+    int compress(String s, int len) {
         int cnt = 1, compressed = 0;
         String prev = s.substring(0, len);
         
@@ -19,8 +19,7 @@ class Solution {
             }
         }
         
-        // 압축하고 남은 길이를 더해줌
-        if (cnt > 1) {
+        if (cnt > 1) {  // 압축하고 남은 길이를 더해줌
             compressed += Math.log10(cnt) + 1;
         }
         
