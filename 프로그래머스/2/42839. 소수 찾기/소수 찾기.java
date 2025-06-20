@@ -3,7 +3,7 @@ import java.util.HashSet;
 import java.util.Collections;
 
 class Solution {
-    static void generate(int depth, int piece, String numbers, boolean[] isVisited, Set<Integer> digitSet) {
+    void generate(int depth, int piece, String numbers, boolean[] isVisited, Set<Integer> digitSet) {
         digitSet.add(piece);
         if (depth == numbers.length()) return;
         
@@ -16,7 +16,7 @@ class Solution {
         }
     }
     
-    static int countPrimeNumbers(Set<Integer> digitSet) {
+    int countPrimeNumbers(Set<Integer> digitSet) {
         final int MAX_NUMBER = Collections.max(digitSet);
         boolean[] isNotPrime = new boolean[MAX_NUMBER + 1];
         int cnt = 0;
