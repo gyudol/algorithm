@@ -1,25 +1,27 @@
 class Solution {
     static int compress(String s, int len) {
         int cnt = 1, compressed = 0;
+        String prev = s.substring(0, len);
         
-        for (int src = 0; src <= s.length() - len * 2; src += len) {
-            if (s.substring(src, src + len).equals(
-                s.substring(src + len, src + len * 2))) {
-                
+        for (int i = len; i <= s.length() - len; i += len) {
+            String cur = s.substring(i, i + len);
+            
+            if (cur.equals(prev)) {
                 cnt++;
             } else {
                 if (cnt > 1) {
-                    compressed += Integer.toString(cnt).length();
+                    compressed += Math.log10(cnt) + 1;
                     cnt = 1;
                 }
                 
+                prev = cur;
                 compressed += len;
             }
         }
         
         // 압축하고 남은 길이를 더해줌
         if (cnt > 1) {
-            compressed += Integer.toString(cnt).length();
+            compressed += Math.log10(cnt) + 1;
         }
         
         return compressed + len + s.length() % len;
