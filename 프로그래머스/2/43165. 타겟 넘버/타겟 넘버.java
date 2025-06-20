@@ -1,5 +1,5 @@
 class Solution {
-    static int countTicketNumber(int depth, int sum, int[] numbers, int target) {
+    int countTicketNumber(int depth, int sum, int[] numbers, int target) {
         if (depth == numbers.length) {
             if (sum == target) return 1;
             return 0;
