@@ -7,55 +7,55 @@ import java.util.ArrayList;
 class Solution {
     Map<String, Integer> courseMap;
     
-    void generate(int src, String course, int tgDepth, String order) {
+    void generate(int src, StringBuilder course, int tgDepth, char[] order) {
         if (course.length() == tgDepth) {
-            courseMap.put(course, courseMap.getOrDefault(course, 0) + 1);
+            String key = course.toString();
+            
+            courseMap.put(key, courseMap.getOrDefault(key, 0) + 1);
             return;
         }
         
-        for (int i = src; i < order.length(); i++) {
-            generate(i + 1, course + order.charAt(i), tgDepth, order);
+        for (int i = src; i < order.length; i++) {
+            course.append(order[i]);
+            generate(i + 1, course, tgDepth, order);
+            course.deleteCharAt(course.length() - 1);
         }
     }
     
-    public String[] solution(String[] orders, int[] courseLens) {
+    public String[] solution(String[] orders, int[] sizes) {
         courseMap = new HashMap<>();
         
         for (String order : orders) {
-            char[] tmpOrder = order.toCharArray();
+            char[] sortedOrder = order.toCharArray();
+            Arrays.sort(sortedOrder);
             
-            Arrays.sort(tmpOrder);
-            order = new String(tmpOrder);
-            
-            for (int tgDepth : courseLens) {
-                generate(0, "", tgDepth, order);
+            for (int tgDepth : sizes) {
+                generate(0, new StringBuilder(), tgDepth, sortedOrder);
             }
         }
         
         List<String> courseList = new ArrayList<>();
         
-        for (int courseLen : courseLens) {
-            List<String> tmpList = new ArrayList<>();
+        for (int size : sizes) {
+            List<String> candidates = new ArrayList<>();
             int maxCnt = 2;     // 최소 2명 이상의 손님으로부터 주문되어야 함
             
             for (String course : courseMap.keySet()) {
                 int cnt = courseMap.get(course);
                 
-                if (course.length() != courseLen || cnt < maxCnt) continue;
+                if (course.length() != size || cnt < maxCnt) continue;
                 
                 if (cnt > maxCnt) {
-                    tmpList.clear();
+                    candidates.clear();
                     maxCnt = cnt;
                 }
                 
-                tmpList.add(course);
+                candidates.add(course);
             }
             
-            courseList.addAll(tmpList);
+            courseList.addAll(candidates);
         }
         
-        return courseList.stream()
-            .sorted((s1, s2) -> s1.compareTo(s2))
-            .toArray(String[]::new);
+        return courseList.stream().sorted().toArray(String[]::new);
     }
 }
