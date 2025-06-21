@@ -4,37 +4,29 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.function.Consumer;
 
 class Solution {
-    void forEachKey(int depth, String prefix, String[] tokens, Consumer<String> action) {
+    Map<String, List<Integer>> scoreMap;
+    
+    void expandWithToken(int depth, StringBuilder prefix, int score, String token, String[] tokens) {
+        int prevLength = prefix.length();
+        
+        prefix.append(token);
+        generate(depth + 1, prefix, score, tokens);
+        prefix.setLength(prevLength);
+    }
+    
+    void generate(int depth, StringBuilder prefix, int score, String[] tokens) {
         if (depth == tokens.length - 1) {
-            action.accept(prefix);
+            String key = prefix.toString();
+            
+            scoreMap.putIfAbsent(key, new ArrayList<>());
+            scoreMap.get(key).add(score);
             return;
         }
         
-        forEachKey(depth + 1, prefix + tokens[depth], tokens, action);
-        forEachKey(depth + 1, prefix + "-", tokens, action);
-    }
-    
-    Map<String, List<Integer>> buildScoreMap(String[] infos) {
-        Map<String, List<Integer>> scoreMap = new HashMap<>();
-        
-        for (String info : infos) {
-            String[] tokens = info.split(" ");
-            int score = Integer.parseInt(tokens[tokens.length - 1]);
-            
-            forEachKey(0, "", tokens, key -> {
-                scoreMap.putIfAbsent(key, new ArrayList<>());
-                scoreMap.get(key).add(score);
-            });
-        }
-        
-        for (List<Integer> list : scoreMap.values()) {
-            Collections.sort(list);
-        }
-        
-        return scoreMap;
+        expandWithToken(depth, prefix, score, tokens[depth], tokens);
+        expandWithToken(depth, prefix, score, "-", tokens);
     }
     
     int binarySearch(int score, List<Integer> scores) {
@@ -54,11 +46,11 @@ class Solution {
         return scores.size();
     }
     
-    int count(String query, Map<String, List<Integer>> scoreMap) {
+    int count(String query) {
         String[] tokens = query.split(" (and )?"); // 공백 한 칸 뒤에 "and"가 있거나 없음
         String key = String.join("", Arrays.copyOf(tokens, tokens.length - 1));
         
-        if (!scoreMap.keySet().contains(key)) return 0;
+        if (!scoreMap.containsKey(key)) return 0;
         
         int score = Integer.parseInt(tokens[tokens.length - 1]);
         List<Integer> scores = scoreMap.get(key);
@@ -67,11 +59,23 @@ class Solution {
     }
     
     public int[] solution(String[] infos, String[] queries) {
-        Map<String, List<Integer>> scoreMap = buildScoreMap(infos);
+        scoreMap = new HashMap<>();
+        
+        for (String info : infos) {
+            String[] tokens = info.split(" ");
+            int score = Integer.parseInt(tokens[tokens.length - 1]);
+            
+            generate(0, new StringBuilder(), score, tokens);
+        }
+        
+        for (List<Integer> list : scoreMap.values()) {
+            Collections.sort(list);
+        }
+        
         int[] counts = new int[queries.length];
         
         for (int i = 0; i < queries.length; i++) {
-            counts[i] = count(queries[i], scoreMap);
+            counts[i] = count(queries[i]);
         }
         
         return counts;
