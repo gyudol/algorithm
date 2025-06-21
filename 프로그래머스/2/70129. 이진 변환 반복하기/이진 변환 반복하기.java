@@ -3,11 +3,11 @@ class Solution {
         int loop = 0, zeroCnt = 0;
         
         while (!s.equals("1")) {
-            String replaced = s.replaceAll("[0]", "");
+            String replaced = s.replace("0", "");
             
             zeroCnt += s.length() - replaced.length();
-            loop++;
             s = Integer.toString(replaced.length(), 2);
+            loop++;
         }
         
         return new int[] {loop, zeroCnt};
