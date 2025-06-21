@@ -8,25 +8,15 @@ import java.util.Collections;
 class Solution {
     Map<String, List<Integer>> scoreMap;
     
-    void expandWithToken(int depth, StringBuilder prefix, int score, String token, String[] tokens) {
-        int prevLength = prefix.length();
-        
-        prefix.append(token);
-        generate(depth + 1, prefix, score, tokens);
-        prefix.setLength(prevLength);
-    }
-    
-    void generate(int depth, StringBuilder prefix, int score, String[] tokens) {
+    void generate(int depth, String prefix, int score, String[] tokens) {
         if (depth == tokens.length - 1) {
-            String key = prefix.toString();
-            
-            scoreMap.putIfAbsent(key, new ArrayList<>());
-            scoreMap.get(key).add(score);
+            scoreMap.putIfAbsent(prefix, new ArrayList<>());
+            scoreMap.get(prefix).add(score);
             return;
         }
         
-        expandWithToken(depth, prefix, score, tokens[depth], tokens);
-        expandWithToken(depth, prefix, score, "-", tokens);
+        generate(depth + 1, prefix + tokens[depth], score, tokens);
+        generate(depth + 1, prefix + "-", score, tokens);
     }
     
     int binarySearch(int score, List<Integer> scores) {
@@ -65,7 +55,7 @@ class Solution {
             String[] tokens = info.split(" ");
             int score = Integer.parseInt(tokens[tokens.length - 1]);
             
-            generate(0, new StringBuilder(), score, tokens);
+            generate(0, "", score, tokens);
         }
         
         for (List<Integer> list : scoreMap.values()) {
