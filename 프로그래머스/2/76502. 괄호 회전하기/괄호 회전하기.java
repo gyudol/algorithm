@@ -1,32 +1,31 @@
-import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 class Solution {
-    boolean isCorrect(int offset, String s) {
-        Stack<Character> stack = new Stack<>();
+    boolean isCorrect(int offset, char[] str) {
+        Deque<Character> stack = new ArrayDeque<>();
             
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt((i + offset) % s.length());
+            for (int i = 0; i < str.length; i++) {
+                char c = str[(i + offset) % str.length];
                 
-                if (c == '(' || c == '{' || c == '[') {
-                    stack.push(c);
-                } else if (stack.empty() || (c == ')' && stack.peek() != '(') ||
-                          (c == '}' && stack.peek() != '{') || 
-                           (c == ']' && stack.peek() != '[')) {
-                    
-                    return false;
-                } else {
-                    stack.pop();
+                switch (c) {
+                    case '(': stack.push(')'); break;
+                    case '{': stack.push('}'); break;
+                    case '[': stack.push(']'); break;
+                    case ')': case '}': case ']':
+                        if (stack.isEmpty() || c != stack.pop()) return false;
                 }
             }
         
-        return stack.empty();
+        return stack.isEmpty();
     }
     
     public int solution(String s) {
+        char[] str = s.toCharArray();
         int cnt = 0;
         
         for (int offset = 0; offset < s.length(); offset++) {
-            if (isCorrect(offset, s)) cnt++;
+            if (isCorrect(offset, str)) cnt++;
         }
         
         return cnt;
