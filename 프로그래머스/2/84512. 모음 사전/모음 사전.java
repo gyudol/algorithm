@@ -1,22 +1,21 @@
-import java.util.List;
-import java.util.ArrayList;
-
 class Solution {
     final char[] WORDS = {'A', 'E', 'I', 'O', 'U'};
+    int index = 0;
     
-    void generate(String word, List<String> dictionary) {
-        dictionary.add(word);
-        if (word.length() == WORDS.length) return;
+    boolean dfs(String word, String target) {
+        if (word.equals(target)) return true;
+        if (word.length() == WORDS.length) return false;
         
         for (char c : WORDS) {
-            generate(word + c, dictionary);
+            index++;
+            if (dfs(word + c, target)) return true;
         }
+        
+        return false;
     }
     
     public int solution(String word) {
-        List<String> dictionary = new ArrayList<>();
-        
-        generate("", dictionary);
-        return dictionary.indexOf(word);
+        dfs("", word);
+        return index;
     }
 }
