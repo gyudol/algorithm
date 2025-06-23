@@ -1,36 +1,42 @@
 class Solution {
     final int N = 5;
-    final int MAX_DISTANCE = 2;
-    final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
     
-    boolean isSafeDistance(int row, int col, int depth, char[][] room, boolean[][] isVisited) {
-        if (room[row][col] == 'P' && depth > 0) return false;
-        if (depth == MAX_DISTANCE) return true;
+    boolean isInBounds(int row, int col) {
+        return row >= 0 && row < N && col >= 0 && col < N;
+    }
+    
+    boolean isNextToVolunteer(char[][] room, int row, int col, int except) {
+        for (int d = 0; d < DIRECTIONS.length; d++) {
+            if (d == except) continue;
+            
+            int nr = row + DIRECTIONS[d][0], nc = col + DIRECTIONS[d][1];
+            
+            if (isInBounds(nr, nc) && room[nr][nc] == 'P') return true;
+        }
         
-        for (int[] d : DIRECTIONS) {
-            int nr = row + d[0], nc = col + d[1];
+        return false;
+    }
+    
+    boolean isDistanced(char[][] room, int row, int col) {
+        for (int d = 0; d < DIRECTIONS.length; d++) {
+            int nr = row + DIRECTIONS[d][0], nc = col + DIRECTIONS[d][1];
             
-            if (nr < 0 || nr >= N || nc < 0 || nc >= N ||
-                room[nr][nc] == 'X' || isVisited[nr][nc]) continue;
+            if (!isInBounds(nr, nc)) continue;
             
-            isVisited[row][col] = true;
-            if (!isSafeDistance(nr, nc, depth + 1, room, isVisited)) return false;
+            switch (room[nr][nc]) {
+                case 'P': return false;
+                case 'O': if (isNextToVolunteer(room, nr, nc, 3 - d)) return false;
+            }
         }
         
         return true;
     }
     
-    int checkRoomCompliance(String[] place) {
-        char[][] room = new char[N][N];
-        
-        for (int i = 0; i < N; i++) {
-            room[i] = place[i].toCharArray();
-        }
-        
+    int isSafeRoom(char[][] room) {
         for (int row = 0; row < N; row++) {
             for (int col = 0; col < N; col++) {
-                if (room[row][col] == 'P' &&
-                    !isSafeDistance(row, col, 0, room, new boolean[N][N])) return 0;
+                if (room[row][col] == 'P' && !isDistanced(room, row, col)) return 0;
             }
         }
         
@@ -38,12 +44,18 @@ class Solution {
     }
     
     public int[] solution(String[][] places) {
-        int[] checks = new int[N];
+        int[] checked = new int[N];
         
         for (int i = 0; i < N; i++) {
-            checks[i] = checkRoomCompliance(places[i]);
+            char[][] room = new char[N][N];
+            
+            for (int j = 0; j < N; j++) {
+                room[j] = places[i][j].toCharArray();
+            }
+            
+            checked[i] = isSafeRoom(room);
         }
         
-        return checks;
+        return checked;
     }
 }
