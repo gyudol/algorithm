@@ -2,74 +2,80 @@ import java.util.Queue;
 import java.util.ArrayDeque;
 
 class Solution {
-    private static final int[][] DIR = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-    private static int N, M;
-    private static int srcRow, srcCol;
+    final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     
-    private class State {
-        int row, col, dist;
-        
-        private State(int row, int col, int dist) {
-            this.row = row;
-            this.col = col;
-            this.dist = dist;
+    int R, C;
+    char[][] maze;
+    
+    Coord getCoordinate(char point) {
+        for (int row = 0; row < R; row++) {
+            for (int col = 0; col < C; col++) {
+                if (maze[row][col] == point) return new Coord(row, col);
+            }
         }
+        
+        return null;
     }
     
-    private int bfs(char[][] maze, char target) {
+    int bfs(char src, char des) {
+        Coord start = getCoordinate(src);
+        boolean[][] isVisited = new boolean[R][C];
         Queue<State> q = new ArrayDeque<>();
-        boolean[][] isVisited = new boolean[N][M];
         
-        q.offer(new State(srcRow, srcCol, 0));
-        isVisited[srcRow][srcCol] = true;
+        q.offer(new State(start.row, start.col, 0));
+        isVisited[start.row][start.col] = true;
         
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             State state = q.poll();
-            int row = state.row, col = state.col, dist = state.dist;
+            int row = state.row, col = state.col, time = state.time;
             
-            if(maze[row][col] == target) {
-                srcRow = row;   srcCol = col;
-                return dist;
-            }
+            if (maze[row][col] == des) return time;
             
-            for(int[] d : DIR) {
-                int nextRow = row + d[0], nextCol = col + d[1];
+            for (int[] d : DIRECTIONS) {
+                int nr = row + d[0], nc = col + d[1];
                 
-                if(nextRow < 0 || nextRow >= N || nextCol < 0 || nextCol >= M
-                    || isVisited[nextRow][nextCol] || maze[nextRow][nextCol] == 'X') continue;
+                if (nr < 0 || nr >= R || nc < 0 || nc >= C || 
+                    maze[nr][nc] == 'X' || isVisited[nr][nc]) continue;
                 
-                isVisited[nextRow][nextCol] = true;
-                q.offer(new State(nextRow, nextCol, dist + 1));
+                isVisited[nr][nc] = true;
+                q.offer(new State(nr, nc, time + 1));
             }
         }
         
         return -1;
     }
     
-    private void getSource(char[][] maze) {
-        for(int row = 0; row < N; row++) {
-            for(int col = 0; col < M; col++) {
-                if(maze[row][col] == 'S') {
-                    srcRow = row;   srcCol = col;
-                    return;
-                }
-            }
+    public int solution(String[] maps) {
+        R = maps.length;
+        C = maps[0].length();
+        maze = new char[R][];
+        
+        for (int i = 0; i < R; i++) {
+            maze[i] = maps[i].toCharArray();
+        }
+        
+        int timeToLever = bfs('S', 'L'),
+            timeToExit = bfs('L', 'E');
+        
+        if (timeToLever == -1 || timeToExit == -1) return -1;
+        return timeToLever + timeToExit;
+    }
+    
+    class Coord {
+        int row, col;
+        
+        Coord(int row, int col) {
+            this.row = row;
+            this.col = col;
         }
     }
     
-    public int solution(String[] maps) {
-        char[][] maze = new char[maps.length][];
-        N = maps.length; M = maps[0].length();
+    class State extends Coord {
+        int time;
         
-        for(int idx = 0; idx < N; idx++) maze[idx] = maps[idx].toCharArray();
-        getSource(maze);
-        
-        int levDist = bfs(maze, 'L');
-        if(levDist == -1) return levDist;
-        
-        int resDist = bfs(maze, 'E');
-        if(resDist == -1) return resDist;
-        
-        return levDist + resDist;
+        State(int row, int col, int time) {
+            super(row, col);
+            this.time = time;
+        }
     }
 }
