@@ -4,30 +4,23 @@ import java.util.HashSet;
 class Solution {
     String[] appliedUsers, bannedUsers;
     
-    void generate(int depth, boolean[] isSelected, Set<String> sanctions) {
+    void generate(int depth, int selected, Set<Integer> sanctions) {
         if (depth == bannedUsers.length) {
-            String selectedNumbers = "";
-            
-            for (int i = 0; i < isSelected.length; i++) {
-                if (!isSelected[i]) continue;
-                selectedNumbers += i;
-            }
-            
-            sanctions.add(selectedNumbers);
+            sanctions.add(selected);
             return;
         }
         
         for (int i = 0; i < appliedUsers.length; i++) {
-            if (isSelected[i] || !appliedUsers[i].matches(bannedUsers[depth])) continue;
+            if ((selected & 1 << i) != 0 || !appliedUsers[i].matches(bannedUsers[depth])) continue;
             
-            isSelected[i] = true;
-            generate(depth + 1, isSelected, sanctions);
-            isSelected[i] = false;
+            selected |= 1 << i;
+            generate(depth + 1, selected, sanctions);
+            selected ^= 1 << i;
         }
     }
     
     public int solution(String[] user_id, String[] banned_id) {
-        Set<String> sanctions = new HashSet<>();
+        Set<Integer> sanctions = new HashSet<>();
         appliedUsers = user_id;
         bannedUsers = banned_id;
         
@@ -35,7 +28,7 @@ class Solution {
             bannedUsers[i] = bannedUsers[i].replace("*", ".");
         }
         
-        generate(0, new boolean[appliedUsers.length], sanctions);
+        generate(0, 0, sanctions);
         return sanctions.size();
     }
 }
