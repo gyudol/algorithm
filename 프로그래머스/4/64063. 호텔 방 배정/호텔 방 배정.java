@@ -5,7 +5,10 @@ class Solution {
     Map<Long, Long> terminal;
     
     long root(long node) {
-        if (!terminal.containsKey(node)) return node;
+        if (!terminal.containsKey(node)) {
+            terminal.put(node, node + 1);
+            return node;
+        }
         
         long root = root(terminal.get(node));
         
@@ -18,15 +21,7 @@ class Solution {
         long[] selected = new long[room_number.length];
         
         for (int i = 0; i < room_number.length; i++) {
-            long room = room_number[i];
-            
-            if (terminal.containsKey(room)) {
-                room = selected[i] = root(room);
-            } else {
-                selected[i] = room;
-            }
-            
-            terminal.put(room, root(room + 1));
+            selected[i] = root(room_number[i]);
         }
         
         return selected;
