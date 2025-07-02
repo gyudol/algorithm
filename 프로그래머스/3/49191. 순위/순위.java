@@ -1,42 +1,39 @@
+import java.util.ArrayList;
+
 class Solution {
-    int countBackward(int des, boolean[] isVisited, boolean[][] graph) {
+    int dfs(int src, boolean[] isVisited, ArrayList<ArrayList<Integer>> matches) {
+        if (isVisited[src]) return 0;
+        
+        isVisited[src] = true;
         int cnt = 1;
         
-        for (int src = 1; src < isVisited.length; src++) {
-            if (!graph[src][des] || isVisited[src]) continue;
-            
-            isVisited[src] = true;
-            cnt += countBackward(src, isVisited, graph);
-        }
-        
-        return cnt;
-    }
-    
-    int countForward(int src, boolean[] isVisited, boolean[][] graph) {
-        int cnt = 1;
-        
-        for (int des = 1; des < isVisited.length; des++) {
-            if (!graph[src][des] || isVisited[des]) continue;
-            
-            isVisited[des] = true;
-            cnt += countForward(des, isVisited, graph);
+        for (int target : matches.get(src)) {
+            cnt += dfs(target, isVisited, matches);
         }
         
         return cnt;
     }
     
     public int solution(int n, int[][] results) {
-        boolean[][] graph = new boolean[n + 1][n + 1];
+        ArrayList<ArrayList<Integer>> winMatches = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> loseMatches = new ArrayList<>();
         
+        for (int i = 0; i <= n; i++) {
+            winMatches.add(new ArrayList<>());
+            loseMatches.add(new ArrayList<>());
+        }
         for (int[] result : results) {
-            graph[result[0]][result[1]] = true;
+            winMatches.get(result[0]).add(result[1]);
+            loseMatches.get(result[1]).add(result[0]);
         }
         
         int cnt = 0;
         
         for (int i = 1; i <= n; i++) {
-            if (countForward(i, new boolean[n + 1], graph) + 
-                countBackward(i, new boolean[n + 1], graph) - 1 == n) cnt++;
+            int winCnt = dfs(i, new boolean[n + 1], winMatches),
+                loseCnt = dfs(i, new boolean[n + 1], loseMatches);
+            
+            if (winCnt + loseCnt - 1 == n) cnt++;
         }
         
         return cnt;
