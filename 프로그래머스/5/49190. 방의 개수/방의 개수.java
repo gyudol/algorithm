@@ -2,6 +2,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Objects;
 
 class Solution {
     final int[][] DIRECTIONS = {{0, 1}, {1, 1}, {1, 0}, {1, -1},
@@ -46,12 +47,12 @@ class Solution {
         
         @Override
         public int hashCode() {
-            return (x + "," + y).hashCode();
+            return Objects.hash(x, y);
         }
         
         @Override
         public boolean equals(Object o) {
-            if (! (o instanceof Object)) return false;
+            if (! (o instanceof Vertex)) return false;
             Vertex v = (Vertex) o;
             
             return x == v.x && y == v.y;
