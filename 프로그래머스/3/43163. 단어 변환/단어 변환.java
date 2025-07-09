@@ -39,18 +39,13 @@ class Solution {
         return 0;
     }
     
-    class State implements Comparable<State> {
+    class State {
         String word;
         int depth;
         
         State(String word, int depth) {
             this.word = word;
             this.depth = depth;
-        }
-        
-        @Override
-        public int compareTo(State o) {
-            return Integer.compare(depth, o.depth);
         }
     }
 }
