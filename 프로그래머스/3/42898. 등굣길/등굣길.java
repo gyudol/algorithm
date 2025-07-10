@@ -1,6 +1,5 @@
 class Solution {
     final int MODULUS = 1_000_000_007;
-    final int[][] DIRECTIONS = {{0, 1}, {1, 0}};
     
     int[][] routes;
     
