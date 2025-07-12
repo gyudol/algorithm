@@ -1,82 +1,79 @@
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
 class Solution {
-    public class Node {
-        public final int x;
-        public final int y;
-        public final int value;
-        
-        public Node left;
-        public Node right;
-        
-        private Node(int x, int y, int value) {
-            this.x = x;
-            this.y = y;
-            this.value = value;
+    void insert(Node root, Node node) {
+        if (node.x < root.x) {
+            if (root.left == null) {
+                root.left = node;
+            } else {
+                insert(root.left, node);
+            }
+        } else {
+            if (root.right == null) {
+                root.right = node;
+            } else {
+                insert(root.right, node);
+            }
         }
     }
     
-    private void insertNode(Node root, Node node) {
-        if(node.x < root.x) {
-            if(root.left == null) root.left = node;
-            else insertNode(root.left, node);
-        }
-        else {
-            if(root.right == null) root.right = node;
-            else insertNode(root.right, node);
-        }
+    void preorder(Node node, List<Integer> process) {
+        if (node == null) return;
+        
+        process.add(node.num);
+        preorder(node.left, process);
+        preorder(node.right, process);
     }
     
-    private void pre(Node node, List<Integer> preorder) {
-        if(node == null) return;
+    void postorder(Node node, List<Integer> process) {
+        if (node == null) return;
         
-        preorder.add(node.value);
-        
-        pre(node.left, preorder);
-        pre(node.right, preorder);
-    }
-    
-    private void post(Node node, List<Integer> postorder) {
-        if(node == null) return;
-        
-        post(node.left, postorder);
-        post(node.right, postorder);
-        
-        postorder.add(node.value);
+        postorder(node.left, process);
+        postorder(node.right, process);
+        process.add(node.num);
     }
     
     public int[][] solution(int[][] nodeinfo) {
-        Node [] nodes = new Node [nodeinfo.length];
+        Node[] nodes = new Node[nodeinfo.length];
         
-        for(int i = 0; i < nodes.length; i++) {
-            nodes[i] = new Node(nodeinfo[i][0], nodeinfo[i][1], i + 1);
+        for (int i = 0; i < nodeinfo.length; i++) {
+            nodes[i] = new Node(i + 1, nodeinfo[i][0], nodeinfo[i][1]);
         }
         
-        Arrays.sort(nodes, new Comparator<Node>() {
-            @Override
-            public int compare(Node n1, Node n2) {
-                return n2.y - n1.y;
-            }
-        });
-        
+        Arrays.sort(nodes);
         Node root = nodes[0];
         
-        for(int i = 1; i < nodes.length; i++) {
-            insertNode(root, nodes[i]);
+        for (int i = 1; i < nodes.length; i++) {
+            insert(root, nodes[i]);
         }
         
         List<Integer> preorder = new ArrayList<>();
-        pre(root, preorder);
-        
         List<Integer> postorder = new ArrayList<>();
-        post(root, postorder);
         
-        return new int [][] {
+        preorder(root, preorder);
+        postorder(root, postorder);
+        
+        return new int[][] {
             preorder.stream().mapToInt(Integer::intValue).toArray(),
             postorder.stream().mapToInt(Integer::intValue).toArray()
         };
+    }
+    
+    class Node implements Comparable<Node> {
+        int num, x, y;
+        Node left, right;
+        
+        Node(int num, int x, int y) {
+            this.num = num;
+            this.x = x;
+            this.y = y;
+        }
+        
+        @Override
+        public int compareTo(Node other) {
+            return Integer.compare(other.y, y);
+        }
     }
 }
