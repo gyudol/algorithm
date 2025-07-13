@@ -1,29 +1,31 @@
+import java.util.Arrays;
 import java.util.PriorityQueue;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 class Solution {
-    public int solution(int[][] jobs) {
-        PriorityQueue<Job> readyQ = new PriorityQueue<>();
-        List<Job> waitingList = new ArrayList<>();
+    public int solution(int[][] rawJobs) {
+        Job[] jobs = new Job[rawJobs.length];
         
         for (int i = 0; i < jobs.length; i++) {
-            waitingList.add(new Job(i, jobs[i][0], jobs[i][1]));    
+            jobs[i] = new Job(i, rawJobs[i][0], rawJobs[i][1]);
         }
         
         // Comparator 우선
-        waitingList.sort((j1, j2) -> Integer.compare(j1.start, j2.start));
+        Arrays.sort(jobs, (j1, j2) -> Integer.compare(j1.start, j2.start));
         
-        int cur = 0, total = 0, idx = 0;
-        int waitingSize = waitingList.size();
+        PriorityQueue<Job> readyQ = new PriorityQueue<>();
+        Deque<Job> waitingQ = new ArrayDeque<>(Arrays.asList(jobs));
         
-        while (!readyQ.isEmpty() || idx < waitingSize) {
-            while (idx < waitingSize && cur >= waitingList.get(idx).start) {
-                readyQ.offer(waitingList.get(idx++));
+        int cur = 0, total = 0;
+        
+        while (!readyQ.isEmpty() || !waitingQ.isEmpty()) {
+            while (!waitingQ.isEmpty() && cur >= waitingQ.peek().start) {
+                readyQ.offer(waitingQ.poll());
             }
             
             if (readyQ.isEmpty()) {
-                cur = waitingList.get(idx).start;
+                cur = waitingQ.peek().start;
                 continue;
             }
             
