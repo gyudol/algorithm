@@ -1,11 +1,9 @@
-import java.util.PriorityQueue;
+import java.util.TreeMap;
 import java.util.StringTokenizer;
 
 class Solution {
     public int[] solution(String[] operations) {
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(
-            (n1, n2) -> Integer.compare(n2, n1));
+        TreeMap<Integer, Integer> countMap = new TreeMap<>();
         
         for (String operation : operations) {
             StringTokenizer st = new StringTokenizer(operation);
@@ -13,21 +11,25 @@ class Solution {
             int data = Integer.parseInt(st.nextToken());
             
             switch (command) {
-                case "I": minHeap.offer(data);
-                    maxHeap.offer(data);
+                case "I": countMap.put(data, countMap.getOrDefault(data, 0) + 1);
                     break;
                 case "D": {
-                    if (data == 1) {
-                        minHeap.remove(maxHeap.poll());
+                    if (countMap.isEmpty()) break;
+                    
+                    int key = data == 1 ? countMap.lastKey() : countMap.firstKey(),
+                        count = countMap.get(key);
+                    
+                    if (count == 1) {
+                        countMap.remove(key);
                     } else {
-                        maxHeap.remove(minHeap.poll());
+                        countMap.put(key, count - 1);
                     }
                 }
             }
         }
         
-        return minHeap.size() == 0 ?
-            new int[] {0, 0} :
-            new int[] {maxHeap.poll(), minHeap.poll()};
+        return countMap.isEmpty()
+            ? new int[] {0, 0}
+            : new int[] {countMap.lastKey(), countMap.firstKey()};
     }
 }
