@@ -11,7 +11,8 @@ class Solution {
             int data = Integer.parseInt(st.nextToken());
             
             switch (command) {
-                case "I": countMap.put(data, countMap.getOrDefault(data, 0) + 1);
+                case "I": 
+                    countMap.put(data, countMap.getOrDefault(data, 0) + 1);
                     break;
                 case "D": {
                     if (countMap.isEmpty()) break;
