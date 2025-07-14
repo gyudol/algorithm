@@ -1,53 +1,52 @@
+import java.util.List;
 import java.util.Arrays;
+import java.util.Comparator;
 
 class Solution {
-    int[][] maxMem, minMem;
+    final List<Comparator<Integer>> COMPARATORS = Arrays.asList(
+        (a, b) -> Integer.compare(a, b),
+        (a, b) -> Integer.compare(b, a)
+    );
     
-    int getMin(int start, int end, String[] arr) {
-        if (minMem[start][end] != Integer.MAX_VALUE) return minMem[start][end];
-        if (end - start == 1) return Integer.parseInt(arr[start]);
+    final int[] INITIAL_VALUES = {
+        Integer.MIN_VALUE,
+        Integer.MAX_VALUE
+    };
+    
+    int[][][] dp;
+    
+    int compute(int start, int end, int compType, String[] arr) {
+        if (dp[compType][start][end] != INITIAL_VALUES[compType])
+            return dp[compType][start][end];
+        if (end - start == 1) return dp[compType][start][end]
+                = Integer.parseInt(arr[start]);
         
-        int min = Integer.MAX_VALUE;
+        int result = INITIAL_VALUES[compType];
         
         for (int i = start + 1; i < end; i += 2) {
-            int left = getMin(start, i, arr),
-                right = arr[i].equals("+") ? getMin(i + 1, end, arr) 
-                    : getMax(i + 1, end, arr);
+            int left = compute(start, i, compType, arr),
+                right = arr[i].equals("+") 
+                    ? compute(i + 1, end, compType, arr)
+                    : compute(i + 1, end, 1 - compType, arr);
             
             int value = arr[i].equals("+") ? left + right : left - right;
-            min = Math.min(value, min);
+            
+            if (COMPARATORS.get(compType).compare(value, result) > 0) {
+                result = value;
+            }
         }
         
-        return minMem[start][end] = min;
-    }
-    
-    int getMax(int start, int end, String[] arr) {
-        if (maxMem[start][end] != Integer.MIN_VALUE) return maxMem[start][end];
-        if (end - start == 1) return Integer.parseInt(arr[start]);
-        
-        int max = Integer.MIN_VALUE;
-        
-        for (int i = start + 1; i < end; i += 2) {
-            int left = getMax(start, i, arr),
-                right = arr[i].equals("+") ? getMax(i + 1, end, arr)
-                    : getMin(i + 1, end, arr);
-                
-            int value = arr[i].equals("+") ? left + right : left - right;
-            max = Math.max(value, max);
-        }
-        
-        return maxMem[start][end] = max;
+        return dp[compType][start][end] = result;
     }
     
     public int solution(String arr[]) {
-        maxMem = new int[arr.length][arr.length + 1];
-        minMem = new int[arr.length][arr.length + 1];
+        dp = new int[2][arr.length][arr.length + 1];
         
         for (int i = 0; i < arr.length; i++) {
-            Arrays.fill(maxMem[i], Integer.MIN_VALUE);
-            Arrays.fill(minMem[i], Integer.MAX_VALUE);
+            Arrays.fill(dp[0][i], Integer.MIN_VALUE);
+            Arrays.fill(dp[1][i], Integer.MAX_VALUE);
         }
         
-        return getMax(0, arr.length, arr);
+        return compute(0, arr.length, 0, arr);
     }
 }
