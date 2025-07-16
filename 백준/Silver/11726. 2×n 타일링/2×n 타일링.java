@@ -2,24 +2,19 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Main {
-	private static final int DIV = 10007;
-	private static int [] dp;
+	static final int MOD = 10_007;
 	
-	private static int fillSquare(int n) {
-		if(dp[n] != 0) return dp[n];
-		
-		return dp[n] = (fillSquare(n - 1) + fillSquare(n - 2)) % DIV;
-	}
-	
-	public static void main(String [] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		dp = new int [n + 1];
-		dp[1] = 1;
-		if(n > 1) dp[2] = 2;
+		final int N = Integer.parseInt(br.readLine());
+		int[] dp = new int[N + 1];
 		
-		for(int i = 3; i < n; i++) fillSquare(i);
+		dp[0] = dp[1] = 1;
 		
-		System.out.print(fillSquare(n));
+		for (int i = 2; i <= N; i++) {
+			dp[i] = (dp[i - 1] + dp[i - 2]) % MOD;
+		}
+		
+		System.out.print(dp[N]);
 	}
 }
