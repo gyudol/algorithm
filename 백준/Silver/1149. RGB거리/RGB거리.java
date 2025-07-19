@@ -1,43 +1,39 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
-public class Main {
-	private static final int COLOR_TYPES = 3;
-	private static int [][] costs;
-	private static int [][] dp;
+class Main {
+	static final int M = 3;
 	
-	private static void rgbDistance(int depth) {
-		if(dp[depth][0] != Integer.MAX_VALUE) return;
+	static int readInt() throws Exception {
+		int c, n = 0;
 		
-		for(int color = 0; color < COLOR_TYPES; color++) {
-			for(int prevColor = 0; prevColor < COLOR_TYPES; prevColor++) {
-				if(prevColor == color) continue;
-				
-				dp[depth][color] = 
-						Math.min(dp[depth][color], costs[depth][color] + dp[depth - 1][prevColor]);
-			}
-		}
+		while ((c = System.in.read()) <= 32);
+		do {
+			n = (n << 3) + (n << 1) + (c & 15);
+		} while ((c = System.in.read()) >= 48);
+		
+		return n;
 	}
 	
-	public static void main(String [] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		costs = new int [n][COLOR_TYPES];
-		dp = new int [n][COLOR_TYPES];
+	public static void main(String[] args) throws Exception {
+		final int N = readInt();
+		int[][] costs = new int[N][M];
+		int[][] dp = new int[N + 1][M + 1];
 		
-		for(int i = 0; i < n; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			
-			for(int j = 0; j < COLOR_TYPES; j++) costs[i][j] = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				costs[i][j] = readInt();
+			}
 		}
 		
-		for(int [] row : dp) Arrays.fill(row, Integer.MAX_VALUE);
-		dp[0] = Arrays.copyOf(costs[0], COLOR_TYPES);
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				dp[i + 1][j] = Integer.MAX_VALUE;
+				
+				for (int k = 0; k < M; k++) {
+					if (j == k) continue;
+					dp[i + 1][j] = Math.min(dp[i][k] + costs[i][k], dp[i + 1][j]);
+				}
+			}
+		}
 		
-		for(int depth = 1; depth < n; depth++) rgbDistance(depth);
-		
-		System.out.print(Math.min(Math.min(dp[n-1][0], dp[n-1][1]), dp[n-1][2]));
+		System.out.print(Math.min(Math.min(dp[N][0], dp[N][1]), dp[N][2]));
 	}
 }
