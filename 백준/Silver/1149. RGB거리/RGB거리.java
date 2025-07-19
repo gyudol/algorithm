@@ -15,7 +15,7 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		final int N = readInt();
 		int[][] costs = new int[N][M];
-		int[][] dp = new int[N + 1][M + 1];
+		int[][] dp = new int[N + 1][M];
 		
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
