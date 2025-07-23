@@ -4,35 +4,34 @@ class Solution {
 	static int N, K;
 	static int[][] board;
 	
-	static int dfs(int row, int col, int depth, boolean flag, boolean[][] isVisited) {
+	static int dfs(int row, int col, int depth, boolean hasCut, boolean[][] isVisited) {
 		int max = depth;
 		
 		for (int[] d : DIRECTIONS) {
 			int nr = row + d[0], nc = col + d[1];
 			
 			if (nr < 0 || nr >= N || nc < 0 || nc >= N || isVisited[nr][nc]) continue;
+			isVisited[nr][nc] = true;
 			
 			if (board[nr][nc] < board[row][col]) {
-				isVisited[nr][nc] = true;
-				max = Math.max(dfs(nr, nc, depth + 1, flag, isVisited), max);
-				isVisited[nr][nc] = false;
-			} else if (!flag && board[nr][nc] - K < board[row][col]) {
-				isVisited[nr][nc] = true;
+				max = Math.max(dfs(nr, nc, depth + 1, hasCut, isVisited), max);
+			} else if (!hasCut && board[nr][nc] - K < board[row][col]) {
 				int tmp = board[nr][nc];
 
 				// 최대 공사 깊이 -> 꼭 K 만큼 깎을 필요 없음
 				board[nr][nc] = board[row][col] - 1;
-				max = Math.max(dfs(nr, nc, depth + 1, !flag, isVisited), max);
+				max = Math.max(dfs(nr, nc, depth + 1, !hasCut, isVisited), max);
 				board[nr][nc] = tmp;
-				isVisited[nr][nc] = false;
 			}
+			
+			isVisited[nr][nc] = false;
 		}
 		
 		return max;
 	}
 	
-	static int getMaxDepth(int maxHeight) {
-		int maxDepth = 0;
+	static int getLongestTrail(int maxHeight) {
+		int longestTrail = 0;
 		
 		for (int row = 0; row < N; row++) {
 			for (int col = 0; col < N; col++) {
@@ -40,13 +39,13 @@ class Solution {
 					boolean[][] isVisited = new boolean[N][N];
 					
 					isVisited[row][col] = true;
-					maxDepth = Math.max(dfs(row, col, 1, false, isVisited), maxDepth);
+					longestTrail = Math.max(dfs(row, col, 1, false, isVisited), longestTrail);
 					isVisited[row][col] = false;
 				}
 			}
 		}
 		
-		return maxDepth;
+		return longestTrail;
 	}
 	
 	static int readInt() throws Exception {
@@ -78,7 +77,7 @@ class Solution {
         	}
         	
         	result.append('#').append(tc).append(' ')
-        		.append(getMaxDepth(maxHeight)).append('\n');
+        		.append(getLongestTrail(maxHeight)).append('\n');
     	}
     	
     	System.out.print(result);
